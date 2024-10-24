@@ -1,8 +1,8 @@
-import { Table, Column, Model, DataType, Unique, PrimaryKey, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, Unique, PrimaryKey } from 'sequelize-typescript';
 import { UserType } from '../types/type';
 
 @Table({
-  tableName: 'users',
+  tableName: 'Users',
   timestamps: true
 })
 
@@ -12,13 +12,13 @@ export class User extends Model<UserType> {
     type: DataType.UUID,
     allowNull: false
   })
-  id?: string;
+  id!: string;
   
   @Column({
     type: DataType.STRING,
-    allowNull: false
+    allowNull: true
   })
-  name?: string
+  name!: string
 
 
   @Unique
@@ -26,23 +26,23 @@ export class User extends Model<UserType> {
     type: DataType.STRING,
     allowNull: false,
   })
-  email?: string
+  email!: string
 
   @Column({
     type: DataType.STRING,
     allowNull: false
   })
-  password?: string
+  password!: string
 
   @Column({
     type: DataType.STRING,
-    allowNull: false
+    allowNull: true
   })
-  username?: string
+  username!: string
 
   @Column({
     type: DataType.STRING,
-    allowNull: false
+    allowNull: true
   })
-  avatar?: string
+  avatar!: string
 }
