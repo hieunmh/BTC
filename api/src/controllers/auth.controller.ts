@@ -7,7 +7,10 @@ import { User } from "../models/User";
 export const register: RequestHandler = async (req: Request, res: Response) => {
   const { email, password } = await req.body;
 
-  if (!email || !password) res.status(400).json({ msg: 'Please fill all!' });
+  if (!email || !password) {
+    res.status(400).json({ msg: 'Please fill all!' });
+    return;
+  }
 
   await User.create({
     id: uuidv4(),
@@ -29,21 +32,27 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
       }
     });
   }).catch((err: any) => {
-    res.status(500).json({ msg: err })
+    res.status(500).json({ msg: err.errors[0].message })
   }); 
 }
 
 export const login: RequestHandler = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password } = await req.body;
 
-  if (!email || ! password) res.status(400).json({ msg: 'Please fill all!' });
+  if (!email || !password) {
+    res.status(400).json({ msg: 'Please fill all!' });
+    return;
+  }
 
   const user = await User.findOne({
     attributes: ['id', 'name', 'email', 'password', 'username', 'avatar', 'createdAt', 'updatedAt'],
     where: { email: email }
   });
 
-  if (!user) res.status(404).json({ msg: 'No use found!' });
+  if (!user) {
+    res.status(404).json({ msg: 'No use found!' });
+    return;
+  }
 
   if (bcrypt.compareSync(password, user?.password as string)) {
     req.session.userId = user?.id;
@@ -67,7 +76,10 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
 
 export const logout: RequestHandler = async (req: Request, res: Response) => {
 
-  if (!req.session.userId) res.status(500).json({ msg: 'Logout error!' });
+  if (!req.session.userId) {
+    res.status(500).json({ msg: 'Logout error!' });
+    return;
+  }
 
   req.session.destroy(err => {
     if (err) res.status(500).json({ msg: 'Internal error!' });
