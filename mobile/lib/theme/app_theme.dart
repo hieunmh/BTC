@@ -14,9 +14,9 @@ class AppTheme {
   //light theme
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color.fromRGBO(38, 38, 38, 1),
+    scaffoldBackgroundColor: const Color.fromRGBO(31, 38, 48, 1),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Color.fromRGBO(38, 38, 38, 1)
+      backgroundColor: Color.fromRGBO(31, 38, 48, 1)
     )
   );
 }
