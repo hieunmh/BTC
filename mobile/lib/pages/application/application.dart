@@ -1,5 +1,6 @@
 import 'package:btc/controllers/app/application_controller.dart';
 import 'package:btc/pages/application/home.dart';
+import 'package:btc/pages/application/market.dart';
 import 'package:btc/pages/application/profile.dart';
 import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,11 @@ class ApplicationPage extends StatelessWidget {
         body: PageView(
           controller: applicationcontroller.pageController,
           onPageChanged: (index) {
-            applicationcontroller.hanglePageChange(index);
+            applicationcontroller.handlePageChange(index);
           },
           children: const [
             HomePage(),
+            MarketPage(),
             ProfilePage()
           ],
         ),
@@ -48,8 +50,9 @@ class ApplicationPage extends StatelessWidget {
               items: applicationcontroller.bottomNavBar,
               currentIndex: applicationcontroller.currentPage.value,
               onTap: applicationcontroller.handleNavbarChange,
-              selectedItemColor: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+              selectedItemColor: const Color(0xfffbc700),
               backgroundColor: themecontroller.theme.value == 'light' ? Colors.white : Colors.black,
+              unselectedItemColor: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
 
               unselectedLabelStyle: const TextStyle(
                 fontWeight: FontWeight.w700,
@@ -57,15 +60,14 @@ class ApplicationPage extends StatelessWidget {
               ),
               unselectedIconTheme: const IconThemeData(
                 size: 20
-              )
+              ),
 
-              ,
               selectedLabelStyle: const TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 12
+                fontSize: 10
               ),
               selectedIconTheme: const IconThemeData(
-                size: 24
+                size: 20
               ),
               
             ),
