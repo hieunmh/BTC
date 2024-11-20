@@ -1,7 +1,7 @@
 import 'package:btc/controllers/app/application_controller.dart';
-import 'package:btc/pages/application/home.dart';
-import 'package:btc/pages/application/market.dart';
-import 'package:btc/pages/application/profile.dart';
+import 'package:btc/pages/application/home/home.dart';
+import 'package:btc/pages/application/market/market.dart';
+import 'package:btc/pages/application/profile/profile.dart';
 import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,9 +16,6 @@ class ApplicationPage extends StatelessWidget {
     
     return Obx(() =>
       Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 0.0,
-        ),
         body: PageView(
           controller: applicationcontroller.pageController,
           onPageChanged: (index) {
@@ -35,7 +32,7 @@ class ApplicationPage extends StatelessWidget {
           decoration: const BoxDecoration(
             border: Border(
               top: BorderSide(
-                color: Colors.grey,
+                color: Color(0xfff6f6f6),
                 width: 0.5
               )
             )
