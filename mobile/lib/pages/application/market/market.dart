@@ -10,7 +10,7 @@ class MarketPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final MarketController marketcontroller = Get.find<MarketController>();
+    final MarketController marketcontroller = Get.put(MarketController());
 
     return Scaffold(
       backgroundColor: const Color(0xfff6f6f6),
@@ -20,7 +20,7 @@ class MarketPage extends StatelessWidget {
         backgroundColor: const Color(0xfff6f6f6),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+        padding: const EdgeInsets.fromLTRB(15, 30, 15, 0),
         child: Obx(() =>
           Column(
             children: [
@@ -29,15 +29,19 @@ class MarketPage extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 2, 10, 0),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 2, 10, 0),
                   child: TextField(
+                    onChanged: (value) {
+                      marketcontroller.filterCoins(value);
+                    },
+                    controller: marketcontroller.filterSearch,
                     cursorColor: Colors.black,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black
                     ),
                     obscureText: false,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Search...',
                       hintStyle: TextStyle(
@@ -57,17 +61,24 @@ class MarketPage extends StatelessWidget {
           
               const SizedBox(height: 10),
           
-              Expanded(
-                child: ListView.separated(
-                  itemCount: marketcontroller.coinList.length,
+              marketcontroller.isLoading.value ? 
+              const Expanded(
+                child: Center(
+                  child: Text('Loading...'),
+                )
+                ) : Expanded(
+                child: marketcontroller.noData.value ? 
+                const Center(
+                  child: Text('No coins found'),
+                ) : ListView.separated(
+                  itemCount: marketcontroller.filterList.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 10),
                   itemBuilder: (context, index) {
-                    final item = marketcontroller.coinList[index];
+                    final item = marketcontroller.filterList[index];
                     return CoinItem(coinitem: item);
                   }
                 )
               )
-          
             ],
           ),
         ),

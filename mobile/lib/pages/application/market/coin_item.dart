@@ -19,46 +19,43 @@ class CoinItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 45,
-                height: 45,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xfff7f7f7),
-                  borderRadius: BorderRadius.circular(5)
-                ),
-                child: Image.network(coinitem.image),
-              ),
-
-              const SizedBox(width: 10),
-
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${coinitem.symbol.toUpperCase()}/BUSD',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700
-                    ),
-                  ),
-                  Text(
-                    coinitem.name,
-                    style: const TextStyle(
-                      fontSize: 12
-                    ),
-                  )
-                ],
-              )
-            ],
+          Container(
+            width: 45,
+            height: 45,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xfff7f7f7),
+              borderRadius: BorderRadius.circular(5)
+            ),
+            child: Image.network(coinitem.image),
           ),
 
           const SizedBox(width: 10),
-          
+
           SizedBox(
-            width: 65,
+            width: 80,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  coinitem.symbol.toUpperCase(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700
+                  ),
+                ),
+                Text(
+                  coinitem.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          Expanded(
             child: Sparkline(
               data: coinitem.sparklineIn7D.price,
               lineColor: coinitem.marketCapChangePercentage24H >= 0 ? Colors.green : Colors.red,
@@ -72,31 +69,28 @@ class CoinItem extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 10),
-
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "\$${coinitem.currentPrice.toStringAsFixed(2)}",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700
+          SizedBox(
+            width: 90,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "\$${coinitem.currentPrice.toStringAsFixed(2)}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700
+                  ),
                 ),
-              ),
-              Row(
-                  children: [
-                    Text(
-                      coinitem.priceChange24H >= 0 ? "+${coinitem.priceChangePercentage24H.toStringAsFixed(2)}%" : 
-                      "${coinitem.priceChangePercentage24H.toStringAsFixed(2)}%",
-                      style: TextStyle(
-                        color: coinitem.priceChangePercentage24H >= 0 ? Colors.green : Colors.red,
-                        fontWeight: FontWeight.w500
-                      ),
-                    )
-                  ],
-                ),
-            ],
+                Text(
+                  coinitem.priceChange24H >= 0 ? "+${coinitem.priceChangePercentage24H.toStringAsFixed(2)}%" : 
+                  "${coinitem.priceChangePercentage24H.toStringAsFixed(2)}%",
+                  style: TextStyle(
+                    color: coinitem.priceChangePercentage24H >= 0 ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.w500
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),
