@@ -1,4 +1,6 @@
+import 'package:btc/controllers/app/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 class HomePage extends StatelessWidget {
@@ -6,6 +8,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.find<HomeController>();
+
     return Scaffold(
       backgroundColor: const Color(0xfff6f6f6),
       appBar: AppBar(

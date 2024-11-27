@@ -111,7 +111,6 @@ class MarketController extends GetxController {
     final res = await http.get(
       Uri.parse('https://www.binance.com/bapi/asset/v2/public/asset-service/product/get-products'),
     );
-    isLoading.value = false;
 
     for (var coin in json.decode(res.body)['data']) {
       coinList.add(Coin(
@@ -134,6 +133,9 @@ class MarketController extends GetxController {
         }
       }
     }
+
+    isLoading.value = false;
+
 
     filterCoinList.value = coinList.where((coin) => coin.faceValue == defaultFaceValue.value).toList();
   }

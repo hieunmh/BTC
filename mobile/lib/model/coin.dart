@@ -5,6 +5,7 @@ class Coin {
   String price;
   String? percentChange;
   String faceValue;
+  String? image;
 
   Coin({
     required this.symbol,

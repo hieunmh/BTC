@@ -1,4 +1,3 @@
-import 'package:btc/controllers/app/market_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -49,9 +48,9 @@ class ApplicationController extends GetxController {
     if (!isAnimate.value) {
       currentPage.value = index;
     }
-    if (index != 1) {
-      Get.delete<MarketController>(force: true);
-    }
+    // if (index != 1) {
+    //   Get.delete<MarketController>(force: true);
+    // }
   }
 
   void handleNavbarChange(int index) {

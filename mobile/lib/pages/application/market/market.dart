@@ -1,8 +1,8 @@
 import 'package:btc/controllers/app/market_controller.dart';
+import 'package:btc/pages/application/market/coin_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:intl/intl.dart';
 
 class MarketPage extends StatelessWidget {
   const MarketPage({super.key});
@@ -12,7 +12,6 @@ class MarketPage extends StatelessWidget {
 
     final MarketController marketcontroller = Get.put(MarketController());
 
-    final formatter = NumberFormat("#,##0.00", "en_US");
 
     return Scaffold(
       backgroundColor: const Color(0xfff6f6f6),
@@ -119,67 +118,9 @@ class MarketPage extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(height: 10),
                   itemBuilder: (context, index) {
                     final item = marketcontroller.filterCoinList[index];
-                    return Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    item.shortName,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                  Text(
-                                    ' /${marketcontroller.defaultFaceValue.value}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Text(
-                                item.name
-                              )
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '\$${formatter.format(double.parse(item.price))}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500
-                                ),
-                              ),
-                              Text(
-                                double.parse(item.percentChange ?? '0.0') >= 0 ?
-                                '+${formatter.format(double.parse(item.percentChange ?? '0.0'))}%' : '${formatter.format(double.parse(item.percentChange ?? '0.0'))}%',
-                                style: TextStyle(
-                                  color: double.parse(item.percentChange ?? '0.0') >= 0 ? Colors.green : Colors.red,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 13
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      )
+                    return CoinItem(
+                      item: item, 
+                      faceValue: marketcontroller.defaultFaceValue.value
                     );
                   }
                 )
