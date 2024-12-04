@@ -65,19 +65,24 @@ class TextInput extends StatelessWidget {
           ),
         ),
 
-        errorMsg.isNotEmpty ? Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              errorMsg,
-              style: const TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.w500,
-                fontSize: 12
-              ),
-            )
-          ],
-        ) : const SizedBox(height: 0),
+        const SizedBox(height: 2),
+
+        errorMsg.isNotEmpty ? SizedBox(
+          height: 16,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                errorMsg,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12
+                ),
+              )
+            ],
+          ),
+        ) : const SizedBox(height: 16),
       ],
     );
   }

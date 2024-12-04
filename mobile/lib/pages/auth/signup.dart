@@ -79,19 +79,30 @@ class SignupPage extends StatelessWidget {
                         color: const Color(0xfffbc700),
                         borderRadius: BorderRadius.circular(5)
                       ),
-                      child: const Center(
-                        child: Text(
-                          'Create account',
+                      child: Center(
+                        child: signupcontroller.isLoading.value ? const Text(
+                          'Loading...',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w500
                           ),
+                        ) : const Text(
+                          'Create account',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500
+                            ),
                         ),
                       ),
                     )
                   ),
               
-                  const SizedBox(height: 40),
+                  SizedBox(
+                    height: 40,
+                    child: Text(
+                      signupcontroller.serverError.value,
+                    ),
+                  ),
               
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
