@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     ClipOval(
                       child: Image.asset(
-                        'assets/p.jpg', 
+                        'assets/user-placeholder.png', 
                         width: 50, 
                         height: 50, 
                         fit: BoxFit.cover
@@ -37,11 +37,11 @@ class HomePage extends StatelessWidget {
 
                     const SizedBox(width: 10),
 
-                    const Column(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Hello',
                           style: TextStyle(
                             fontSize: 12,
@@ -49,8 +49,8 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Minh Hieu',
-                          style: TextStyle(
+                          homeController.supabase.auth.currentUser!.email!,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18
                           ),

@@ -60,13 +60,11 @@ class SignupController extends GetxController {
         Get.offAllNamed(AppRoutes.application);
 
       } catch (e) {
-        e.printError();
         serverError.value = 'This email has been registered';
+      } finally {
         isLoading.value = false;
       }
-      // isLoading.value = false;
     }
 
-    // Get.offAllNamed(AppRoutes.application);
   }
 }

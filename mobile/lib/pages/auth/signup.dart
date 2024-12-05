@@ -101,6 +101,9 @@ class SignupPage extends StatelessWidget {
                     height: 40,
                     child: Text(
                       signupcontroller.serverError.value,
+                      style: const TextStyle(
+                        color: Colors.red
+                      ),
                     ),
                   ),
               

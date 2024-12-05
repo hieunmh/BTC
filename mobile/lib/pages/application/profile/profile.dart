@@ -1,4 +1,4 @@
-import 'package:btc/routes/routes.dart';
+import 'package:btc/controllers/app/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +7,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final ProfileController profilecontroller = Get.find<ProfileController>();
     
     return Scaffold(
       body: Center(
@@ -18,7 +20,7 @@ class ProfilePage extends StatelessWidget {
                   padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(50)),
                 ),
                 onPressed: () {
-                  Get.offAllNamed(AppRoutes.signup);
+                  profilecontroller.handleSignOut();
                 }, 
                 child: Container(
                     padding: const EdgeInsets.all(10),

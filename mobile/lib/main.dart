@@ -16,12 +16,15 @@ Future<void> main() async {
     url: '${dotenv.env['SUPABASE_URL']}',
     anonKey: '${dotenv.env['SUPABASE_ANON_KEY']}',
   );
+  final prefs = await SharedPreferences.getInstance();
+  var initialRoute = prefs.getString('token') == null ? AppRoutes.splash : AppRoutes.application;
 
-  runApp(MyApp());
+  runApp(MyApp(token: initialRoute));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  final String token;
+  MyApp({super.key, required this.token});
 
   final Themecontroller themecontroller = Get.put(Themecontroller());
 
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
         darkTheme: AppTheme.darkTheme,
         themeMode: themecontroller.theme.value == 'light' ? ThemeMode.light : ThemeMode.dark,
         getPages: AppPages.routes,
-        initialRoute: AppRoutes.splash
+        initialRoute: token
       ),
     );
   }

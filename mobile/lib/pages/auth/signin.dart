@@ -28,95 +28,111 @@ class SigninPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                const Text(
-                  'Welcome back! Please sign in to your account.',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500
+            child: Obx(() =>
+              Column(
+                children: [
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Welcome back! Please sign in to your account.',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500
+                    ),
                   ),
-                ),
-                
-                const SizedBox(height: 20),
-
-                TextInput(
-                  hintText: 'Email', 
-                  placeholder: 'example@co.jp', 
-                  obscureText: false, 
-                  ctrler: signincontroller.emailController, 
-                  borderColor: Colors.transparent, 
-                  errorMsg: signincontroller.emailError.value
-                ),
-
-                const SizedBox(height: 10),
-
-                TextInput(
-                  hintText: 'Password', 
-                  placeholder: '••••••••', 
-                  obscureText: true, 
-                  ctrler: signincontroller.passwordController, 
-                  borderColor: Colors.transparent, 
-                  errorMsg: signincontroller.passwordError.value
-                ),
-
-                const SizedBox(height: 40),
-
-                TextButton(
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+                  
+                  const SizedBox(height: 20),
+              
+                  TextInput(
+                    hintText: 'Email', 
+                    placeholder: 'example@co.jp', 
+                    obscureText: false, 
+                    ctrler: signincontroller.emailController, 
+                    borderColor: Colors.transparent, 
+                    errorMsg: signincontroller.emailError.value
                   ),
-                  onPressed: () {
-                    signincontroller.handleSignIn();
-                  }, 
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xfffbc700),
-                      borderRadius: BorderRadius.circular(5)
+              
+                  const SizedBox(height: 10),
+              
+                  TextInput(
+                    hintText: 'Password', 
+                    placeholder: '••••••••', 
+                    obscureText: true, 
+                    ctrler: signincontroller.passwordController, 
+                    borderColor: Colors.transparent, 
+                    errorMsg: signincontroller.passwordError.value
+                  ),
+              
+                  const SizedBox(height: 40),
+              
+                  TextButton(
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Create account',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500
-                        ),
+                    onPressed: () {
+                      signincontroller.handleSignIn();
+                    }, 
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xfffbc700),
+                        borderRadius: BorderRadius.circular(5)
                       ),
-                    ),
-                  )
-                ),
-
-                const SizedBox(height: 40),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Not a member?',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: const Text(
-                        'Sign up',
-                        style: TextStyle(
-                          color: Color(0xfffbc700),
-                          fontWeight: FontWeight.w500
+                      child:  Center(
+                        child: signincontroller.isLoading.value ? const Text(
+                          'Loading...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500
+                          )
+                        ) : const Text(
+                          'Sign in',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500
+                          )
                         ),
                       ),
                     )
-                  ],
-                )
-              ],
+                  ),
+
+                  SizedBox(
+                    height: 40,
+                    child: Text(
+                      signincontroller.serverError.value,
+                      style: const TextStyle(
+                        color: Colors.red
+                      ),
+                    ),
+                  ),
+              
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Not a member?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: const Text(
+                          'Sign up',
+                          style: TextStyle(
+                            color: Color(0xfffbc700),
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             )
           ),
         ),
