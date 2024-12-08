@@ -12,7 +12,6 @@ class MarketPage extends StatelessWidget {
 
     final MarketController marketcontroller = Get.put(MarketController());
 
-
     return Scaffold(
       backgroundColor: const Color(0xfff6f6f6),
       appBar: AppBar(
@@ -71,22 +70,22 @@ class MarketPage extends StatelessWidget {
                   itemCount: marketcontroller.faceValueList.length,
                   itemBuilder: (context, index) {
                     final item = marketcontroller.faceValueList[index];
-                    return Container(
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: marketcontroller.defaultFaceValue.value == item ? const Color(0xfffbc700) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: const Color(0xfffbc700),
-                          width: 1
-                        )
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          marketcontroller.defaultFaceValue.value = item;
-                          marketcontroller.filterCoinsFaceValue();
-                          marketcontroller.scrollToCurrentFaceValue();
-                        },
+                    return GestureDetector(
+                      onTap: () {
+                        marketcontroller.defaultFaceValue.value = item;
+                        marketcontroller.filterCoinsFaceValue();
+                        marketcontroller.scrollToCurrentFaceValue();
+                      },
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: marketcontroller.defaultFaceValue.value == item ? const Color(0xfffbc700) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: const Color(0xfffbc700),
+                            width: 1
+                          )
+                        ),
                         child: Center(
                           child: Text(
                             item,

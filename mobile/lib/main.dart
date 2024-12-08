@@ -19,12 +19,12 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   var initialRoute = prefs.getString('token') == null ? AppRoutes.splash : AppRoutes.application;
 
-  runApp(MyApp(token: initialRoute));
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatelessWidget {
-  final String token;
-  MyApp({super.key, required this.token});
+  final String initialRoute;
+  MyApp({super.key, required this.initialRoute});
 
   final Themecontroller themecontroller = Get.put(Themecontroller());
 
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         darkTheme: AppTheme.darkTheme,
         themeMode: themecontroller.theme.value == 'light' ? ThemeMode.light : ThemeMode.dark,
         getPages: AppPages.routes,
-        initialRoute: token
+        initialRoute: initialRoute
       ),
     );
   }

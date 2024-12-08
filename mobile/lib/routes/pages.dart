@@ -1,10 +1,12 @@
 import 'package:btc/bindings/app/application_binding.dart';
 import 'package:btc/bindings/auth/signin_binding.dart';
 import 'package:btc/bindings/auth/signup_binding.dart';
+import 'package:btc/bindings/coin/coinchart_binding.dart';
 import 'package:btc/pages/application/application.dart';
 import 'package:btc/pages/auth/signin.dart';
 import 'package:btc/pages/auth/signup.dart';
 import 'package:btc/pages/auth/spash.dart';
+import 'package:btc/pages/coin/coin_chart.dart';
 import 'package:btc/routes/routes.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +32,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.splash,
       page: () => const SplashPage(),
+    ),
+    GetPage(
+      name: AppRoutes.coinchart, 
+      page: () => const CoinChartPage(),
+      binding: CoinChartBinding()
     )
   ];
 }
