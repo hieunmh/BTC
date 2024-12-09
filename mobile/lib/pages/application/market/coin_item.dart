@@ -20,7 +20,7 @@ class CoinItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final formatter = NumberFormat("#,##0.000", "en_US");
+    final formatter = NumberFormat("#,##0.00", "en_US");
 
     return GestureDetector(
       onTap: () {
@@ -32,6 +32,7 @@ class CoinItem extends StatelessWidget {
             'percentChange': item.percentChange,
             'name': item.name,
             'shortName': item.shortName,
+            'faceValue': faceValue
           }
         );
       },
@@ -55,7 +56,9 @@ class CoinItem extends StatelessWidget {
                     Text(
                       item.shortName,
                       style: const TextStyle(
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        height: 0
                       ),
                     ),
                     Text(

@@ -1,3 +1,4 @@
+import 'package:btc/controllers/app/application_controller.dart';
 import 'package:btc/routes/routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ class SignupController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final supabase = Supabase.instance.client;
+
+  final appcontroller = Get.find<ApplicationController>();
   
   RxString emailError = ''.obs;
   RxString passwordError = ''.obs;
@@ -56,6 +59,20 @@ class SignupController extends GetxController {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         final token = supabase.auth.currentSession?.accessToken;
+        final userid = supabase.auth.currentUser!.id;
+        final useremail = supabase.auth.currentUser!.email;
+        appcontroller.userId.value = userid;
+        appcontroller.userEmail.value = useremail!;
+        appcontroller.userMoney.value = 5000000;
+
+        await supabase.from('Users').insert({
+          'id': userid,
+          'email': useremail,
+          'money': 5000000,
+          'createdAt': DateTime.now().toString(),
+          'updatedAt': DateTime.now().toString()
+        });
+
         await prefs.setString('token', token!);
         Get.offAllNamed(AppRoutes.application);
 

@@ -1,14 +1,20 @@
 import 'dart:convert';
 
+import 'package:btc/controllers/app/application_controller.dart';
 import 'package:btc/model/chart_data.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:uuid/uuid.dart';
 
 class CoinchartController extends GetxController {
   
   late final String symbol;
+  final quantityController = TextEditingController(text: '0.0000');
+  final ApplicationController appcontroller = Get.find<ApplicationController>();
+  final supabase = Supabase.instance.client;
 
   RxString timeFrame = '1m'.obs;
   RxList<ChartData> chartData = <ChartData>[].obs;
@@ -23,6 +29,10 @@ class CoinchartController extends GetxController {
   RxString lowPrice = '0.0'.obs;
   RxString avgPrice = '0.0'.obs;
   ScrollController scrollController = ScrollController();
+  RxString tradeType = 'Buy'.obs;
+  RxString faceValue = ''.obs;
+  RxDouble quantity = 0.0000.obs;
+  
 
   late final String name;
   late final String shortName;
@@ -38,6 +48,7 @@ class CoinchartController extends GetxController {
     percentChange.value = args['percentChange'];
     name = args['name'];
     shortName = args['shortName'];
+    faceValue.value = args['faceValue'];
     getCoinPrices();
     connectWebSocket();
     super.onInit();
@@ -61,6 +72,36 @@ class CoinchartController extends GetxController {
       avgPrice.value = json.decode(event)['w'];
     });
   }
+
+  Future<void> buyCoin() async {
+    try {
+      await supabase.from('Coins').insert({
+        'id': const Uuid().v4(),
+        'coin_name': '$shortName/${faceValue.value}',
+        'user_id': appcontroller.userId.value,
+        'amount': double.parse(quantityController.text),
+        'average_price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
+        'first_time_buy': DateTime.now().toString(),
+      });
+
+      appcontroller.userMoney.value -= double.parse(quantityController.text) * double.parse(trackballPrice.value);
+
+      await supabase.from('Users').update({
+        'money': appcontroller.userMoney.value - (double.parse(quantityController.text) * double.parse(trackballPrice.value))
+      }).eq('id', appcontroller.userId.value);
+
+    } catch (e) {
+      e.printError();
+    }
+  }
+
+  Future<void> sellCoin() async {
+
+  }
+
+  void resetTracsaction() {
+
+  }
   
 
   void getCoinPrices() async {
@@ -76,9 +117,11 @@ class CoinchartController extends GetxController {
       chartData.add(ChartData(index + 1, double.parse(price[1]), price[0]));
     });
 
-
-
     minPrice.value = chartData.map((e) => e.price).reduce((a, b) => a < b ? a : b);
     maxPrice.value = chartData.map((e) => e.price).reduce((a, b) => a > b ? a : b);
+  }
+
+  void setTimeFrame(String timeFrame) {
+    this.timeFrame.value = timeFrame;
   }
 }

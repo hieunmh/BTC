@@ -18,7 +18,7 @@ class CoinStatistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final formatter = NumberFormat("#,##0.000", "en_US");
+    final formatter = NumberFormat("#,##0.00", "en_US");
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),

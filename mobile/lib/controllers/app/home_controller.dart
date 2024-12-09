@@ -9,10 +9,6 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    connectWebSocket();
     super.onInit();
-  }
-
-  void connectWebSocket() async {
   }
 }

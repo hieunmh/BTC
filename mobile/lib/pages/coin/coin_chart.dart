@@ -1,11 +1,13 @@
 import 'package:btc/controllers/coin/coinchart_controller.dart';
 import 'package:btc/pages/coin/chart_line.dart';
+import 'package:btc/pages/coin/coin_facevalue.dart';
+import 'package:btc/pages/coin/coin_price.dart';
 import 'package:btc/pages/coin/coin_statistics.dart';
+import 'package:btc/pages/coin/coin_trade.dart';
 import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:intl/intl.dart';
 
 class CoinChartPage extends StatelessWidget {
   const CoinChartPage({super.key});
@@ -15,8 +17,6 @@ class CoinChartPage extends StatelessWidget {
 
     final CoinchartController coinchartcontroller = Get.find<CoinchartController>();
     final ThemeController themecontroller = Get.find<ThemeController>();
-
-    final formatter = NumberFormat("#,##0.000", "en_US");
 
     return Scaffold(
       body: NestedScrollView(
@@ -53,6 +53,44 @@ class CoinChartPage extends StatelessWidget {
                 ],
               )
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context, 
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                        ),  
+                        title: Center(
+                          child: Text(
+                            '${coinchartcontroller.shortName}/${coinchartcontroller.faceValue.value}',
+                            style: TextStyle(
+                              color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                        
+                        titlePadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                        contentPadding: EdgeInsets.zero,
+                        backgroundColor: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1b2129),
+                        insetPadding: EdgeInsets.zero,
+                        content: const CoinTrade()
+                        
+                      );
+                    }
+                  );
+                },
+                icon: Icon(
+                  FontAwesome.plus_solid,
+                  size: 20,
+                  color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+                ),
+              )
+            ],
           )
         ],
         body: SingleChildScrollView(
@@ -61,39 +99,9 @@ class CoinChartPage extends StatelessWidget {
             child: Obx(() =>
               Column(
                 children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          '\$${formatter.format(double.parse(coinchartcontroller.trackballPrice.value))}',
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: double.parse(coinchartcontroller.percentChange.value) > 0 ? const Color(0xff1bb455) : const Color(0xffd23c3f),
-                          ),
-                        ),
-              
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              double.parse(coinchartcontroller.percentChange.value) >= 0 ? Iconsax.arrow_up_1_bold : Iconsax.arrow_down_bold,
-                              color: double.parse(coinchartcontroller.percentChange.value) >= 0 ? const Color(0xff1bb455) : const Color(0xffd23c3f),
-                              size: 20,
-                            ),
-              
-                            Text(
-                              '${formatter.format(double.parse(coinchartcontroller.percentChange.value).abs())}%',
-                              style: TextStyle(
-                                color: double.parse(coinchartcontroller.percentChange.value) > 0 ? const Color(0xff1bb455) : const Color(0xffd23c3f),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
+                  CoinPrice(
+                    trackballPrice: coinchartcontroller.trackballPrice.value, 
+                    percentChange: coinchartcontroller.percentChange.value
                   ),
               
                   SizedBox(
@@ -111,44 +119,11 @@ class CoinChartPage extends StatelessWidget {
               
                   const SizedBox(height: 15),
               
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    width: double.infinity,
-                    height: 30,
-                    child: ListView.separated(
-                      itemCount: coinchartcontroller.timeFramesList.length,
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) => const SizedBox(width: 10), 
-                      itemBuilder: (context, index) {
-                        final item = coinchartcontroller.timeFramesList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            coinchartcontroller.timeFrame.value = item;
-                            coinchartcontroller.getCoinPrices();
-                          },
-                          child: Container(
-                            width: (Get.width) / 5,
-                            decoration: BoxDecoration(
-                              color: coinchartcontroller.timeFrame.value == item ? const Color(0xfffbc700) : Colors.transparent,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                color: const Color(0xfffbc700),
-                                width: 1
-                              )
-                            ),
-                            child: Center(
-                              child: Text(
-                                item,
-                                style: TextStyle(
-                                  color: coinchartcontroller.timeFrame.value == item ? Colors.white : const Color(0xfffbc700),
-                                  fontWeight: coinchartcontroller.timeFrame.value == item ? FontWeight.bold : FontWeight.normal
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                  CoinFacevalue(
+                    timeFramesList: coinchartcontroller.timeFramesList, 
+                    timeFrame: coinchartcontroller.timeFrame.value, 
+                    getCoinPrices: coinchartcontroller.getCoinPrices, 
+                    setTimeFrame: coinchartcontroller.setTimeFrame
                   ),
               
                   const SizedBox(height: 15),
