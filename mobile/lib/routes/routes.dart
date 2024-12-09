@@ -8,4 +8,6 @@ class AppRoutes {
   static const String splash = '/splash';
 
   static const String coinchart = '/coinchart';
+
+  static const String chat = '/chat';
 }
