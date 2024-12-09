@@ -5,12 +5,14 @@ class CoinStatistics extends StatelessWidget {
   final String lowPrice;
   final String highPrice;
   final String avgPrice;
+  final String theme;
 
   const CoinStatistics({
     super.key,
     required this.lowPrice,
     required this.highPrice,
-    required this.avgPrice
+    required this.avgPrice,
+    required this.theme
   });
 
   @override
@@ -39,7 +41,7 @@ class CoinStatistics extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             decoration: BoxDecoration(
-              color: const Color(0xfff7f7f7),
+              color: theme == 'light' ? const Color(0xfff7f7f7) : const Color(0xff1b2129),
               borderRadius: BorderRadius.circular(5)
             ),
             child: Row(
@@ -47,7 +49,7 @@ class CoinStatistics extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  'High price',
+                  'High price (24h)',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500
@@ -70,7 +72,7 @@ class CoinStatistics extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             decoration: BoxDecoration(
-              color: const Color(0xfff7f7f7),
+              color: theme == 'light' ? const Color(0xfff7f7f7) : const Color(0xff1b2129),
               borderRadius: BorderRadius.circular(5)
             ),
             child: Row(
@@ -78,7 +80,7 @@ class CoinStatistics extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  'Low price',
+                  'Low price (24h)',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500
@@ -101,7 +103,7 @@ class CoinStatistics extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             decoration: BoxDecoration(
-              color: const Color(0xfff7f7f7),
+              color: theme == 'light' ? const Color(0xfff7f7f7) : const Color(0xff1b2129),
               borderRadius: BorderRadius.circular(5)
             ),
             child: Row(
@@ -109,7 +111,7 @@ class CoinStatistics extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  'Average price',
+                  'Average price (24h)',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500

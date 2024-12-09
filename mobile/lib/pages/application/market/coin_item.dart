@@ -8,8 +8,14 @@ import 'package:intl/intl.dart';
 class CoinItem extends StatelessWidget {
   final Coin item;
   final String faceValue;
+  final String theme;
 
-  const CoinItem({super.key, required this.item, required this.faceValue});
+  const CoinItem({
+    super.key, 
+    required this.item, 
+    required this.faceValue,
+    required this.theme
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +38,7 @@ class CoinItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme == 'light' ? Colors.white : const Color(0xff1f2630),
           borderRadius: BorderRadius.circular(5)
         ),
         child: Row(
@@ -72,8 +78,8 @@ class CoinItem extends StatelessWidget {
               children: [
                 Text(
                   '\$${formatter.format(double.parse(item.price))}',
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style: TextStyle(
+                    color: theme == 'light' ? Colors.black : Colors.white,
                     fontWeight: FontWeight.w500
                   ),
                 ),

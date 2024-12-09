@@ -1,6 +1,7 @@
 import 'package:btc/controllers/coin/coinchart_controller.dart';
 import 'package:btc/pages/coin/chart_line.dart';
 import 'package:btc/pages/coin/coin_statistics.dart';
+import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -13,6 +14,7 @@ class CoinChartPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final CoinchartController coinchartcontroller = Get.find<CoinchartController>();
+    final ThemeController themecontroller = Get.find<ThemeController>();
 
     final formatter = NumberFormat("#,##0.000", "en_US");
 
@@ -23,7 +25,7 @@ class CoinChartPage extends StatelessWidget {
             expandedHeight: 0,
             floating: true,
             pinned: true,
-            backgroundColor: const Color(0xfff7f7f7),
+            backgroundColor: themecontroller.theme.value == 'light' ? const Color(0xfff6f6f6) : const Color(0xff1b2129),
             scrolledUnderElevation: 0.0,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
@@ -33,8 +35,8 @@ class CoinChartPage extends StatelessWidget {
                 children: [
                   Text(
                     coinchartcontroller.name,
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style:  TextStyle(
+                      color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold
                     ),
@@ -152,6 +154,7 @@ class CoinChartPage extends StatelessWidget {
                   const SizedBox(height: 15),
               
                   CoinStatistics(
+                    theme: themecontroller.theme.value,
                     lowPrice: coinchartcontroller.lowPrice.value, 
                     highPrice: coinchartcontroller.highPrice.value, 
                     avgPrice: coinchartcontroller.avgPrice.value

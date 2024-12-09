@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   final String initialRoute;
   MyApp({super.key, required this.initialRoute});
 
-  final Themecontroller themecontroller = Get.put(Themecontroller());
+  final ThemeController themecontroller = Get.put(ThemeController());
 
   @override
   Widget build(BuildContext context) {

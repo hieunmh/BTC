@@ -1,4 +1,6 @@
 import 'package:btc/controllers/app/profile_controller.dart';
+import 'package:btc/pages/application/profile/theme_button.dart';
+import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,15 +11,24 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final ProfileController profilecontroller = Get.find<ProfileController>();
+    final ThemeController themecontroller = Get.find<ThemeController>();
     
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
       body: Center(
-        child: Center(
-          child: Column(
+        child: Obx(() =>
+          Column(
             children: [
+              ThemeButton(
+                toggleTheme: themecontroller.toggleTheme,
+                theme: themecontroller.theme.value
+              ),
+          
               TextButton(
                 style: ButtonStyle(
-                  padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(50)),
+                  padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(15)),
                 ),
                 onPressed: () {
                   profilecontroller.handleSignOut();

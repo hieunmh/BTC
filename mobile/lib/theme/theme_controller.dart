@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Themecontroller extends GetxController {
+class ThemeController extends GetxController {
   var themeStatus = 'theme_status';
   var theme = 'light'.obs;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   theme.value = 'light';
-  // }
+  @override
+  void onInit() {
+    getThemePreferences();
+    super.onInit();
+  }
 
   void toggleTheme() async {
     theme.value = theme.value == 'light' ? 'dark' : 'light';
@@ -25,7 +25,7 @@ class Themecontroller extends GetxController {
 
   Future<void> getThemePreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    theme.value = prefs.getString(themeStatus) ?? 'light';
-    Get.changeThemeMode(theme.value == 'light' ? ThemeMode.light : ThemeMode.dark);
+    
+    theme.value =  prefs.getString(themeStatus) ?? 'light';
   }
 }

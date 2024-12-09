@@ -1,4 +1,5 @@
 import 'package:btc/controllers/app/home_controller.dart';
+import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -9,11 +10,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.find<HomeController>();
+    final ThemeController themecontroller = Get.find<ThemeController>();
 
     return Scaffold(
-      backgroundColor: const Color(0xfff6f6f6),
+      backgroundColor: themecontroller.theme.value == 'light' ? const Color(0xfff6f6f6) : const Color(0xff1b2129),
       appBar: AppBar(
-        backgroundColor: const Color(0xfff6f6f6),
+        backgroundColor: themecontroller.theme.value == 'light' ? const Color(0xfff6f6f6) : const Color(0xff1b2129),
         toolbarHeight: 0,
         scrolledUnderElevation: 0.0,
       ),
@@ -111,7 +113,7 @@ class HomePage extends StatelessWidget {
                   return Container(
                     width: 150,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
                       borderRadius: BorderRadius.circular(10)
                     ),
                   );
@@ -145,7 +147,7 @@ class HomePage extends StatelessWidget {
                   return Container(
                     height: 100,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
                       borderRadius: BorderRadius.circular(10)
                     ),
                   );

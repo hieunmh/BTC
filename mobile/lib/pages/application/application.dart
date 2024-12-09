@@ -12,7 +12,7 @@ class ApplicationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ApplicationController applicationcontroller = Get.find<ApplicationController>();
-    final Themecontroller themecontroller = Get.find<Themecontroller>();
+    final ThemeController themecontroller = Get.find<ThemeController>();
     
     return Obx(() =>
       Scaffold(
@@ -29,10 +29,10 @@ class ApplicationPage extends StatelessWidget {
         ),
         bottomNavigationBar: Container(
           height: 90,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
-                color: Color(0xfff6f6f6),
+                color: themecontroller.theme.value == 'dark' ? Colors.grey : const Color(0xffd1d1d1),
                 width: 0.5
               )
             )
@@ -48,8 +48,8 @@ class ApplicationPage extends StatelessWidget {
               currentIndex: applicationcontroller.currentPage.value,
               onTap: applicationcontroller.handleNavbarChange,
               selectedItemColor: const Color(0xfffbc700),
-              backgroundColor: themecontroller.theme.value == 'light' ? Colors.white : Colors.black,
-              unselectedItemColor: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+              backgroundColor: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
+              unselectedItemColor: themecontroller.theme.value == 'light' ? const Color(0xff1f2630) : Colors.white,
 
               unselectedLabelStyle: const TextStyle(
                 fontWeight: FontWeight.w700,
