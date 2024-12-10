@@ -5,8 +5,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
+import os
 
-def run(filename="stock_data.csv"):
+def train_and_save_model(filename="stock_data.csv"):
     # Load dataset
     data = pd.read_csv(filename)
 
@@ -39,12 +41,19 @@ def run(filename="stock_data.csv"):
     nb = GaussianNB()
     nb.fit(X_train, y_train)
 
+    # Save the model and scaler
+    if not os.path.exists('models'):
+        os.makedirs('models')
+        
+    joblib.dump(nb, 'models/naive_bayes_model.pkl')
+    joblib.dump(scaler, 'models/scaler.pkl')
+
     # Evaluate the model
     y_pred = nb.predict(X_test)
 
     # Print classification report
-    return classification_report(y_test, y_pred, zero_division=0)
-
+    print(classification_report(y_test, y_pred, zero_division=0))
+    
     # Plot confusion matrix
     # cm = confusion_matrix(y_test, y_pred)
     # plt.figure(figsize=(8, 6))
@@ -53,22 +62,41 @@ def run(filename="stock_data.csv"):
     # plt.xlabel('Predicted Label')
     # plt.ylabel('True Label')
     # plt.show()
+    
+    return nb, scaler, classification_report(y_test, y_pred, zero_division=0)
 
-    # Prediction for new data
-    # new_data = pd.DataFrame({
-    #     'Open': [150.0],
-    #     'High': [155.0],
-    #     'Low': [50],
-    #     'Close': [85],  # Close is 0
-    #     'Volume': [500000]
-    # })
+def load_or_train_model(filename="stock_data.csv"):
+    if os.path.exists('models/naive_bayes_model.pkl') and os.path.exists('models/scaler.pkl'):
+        # Load the model and scaler
+        nb = joblib.load('models/naive_bayes_model.pkl')
+        scaler = joblib.load('models/scaler.pkl')
+        
+        print("Model and scaler loaded from file.")
+    else:
+        # Train the model and save it
+        nb, scaler, rp = train_and_save_model(filename)
+        print("Model and scaler trained and saved.")
+    return nb, scaler
 
-    # # Normalize the new data
-    # new_data_scaled = scaler.transform(new_data)
+def predict_new_data(open, high, low, close, volume):
+    # Load or train the model and scaler
+    nb, scaler = load_or_train_model()
 
-    # # Make prediction
-    # new_prediction = nb.predict(new_data_scaled)
-    # print(f"Prediction for new data: {new_prediction[0]}")
+    # Normalize the new data
+    new_data = pd.DataFrame({
+        'Open': [float(open)],
+        'High': [float(high)],
+        'Low': [float(low)],
+        'Close': [float(close)],
+        'Volume': [float(volume)]
+    })
+    new_data_scaled = scaler.transform(new_data)
+    
+    # Make prediction
+    prediction = nb.predict(new_data_scaled)
+    return prediction[0]
 
 if __name__ == "__main__":
-    run()
+    # train_and_save_model(filename="stock_data.csv")
+    print(predict_new_data(12.5, 12.8, 12.3, 28.8, 15))
+    print(predict_new_data(12.5, 12.8, 12.3, 9.93, 15))  

@@ -1,13 +1,15 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
+import os
 
-# Load dataset
-def run(filename="stock_data.csv"):
+def train_and_save_model(filename="stock_data.csv"):
+    # Load dataset
     data = pd.read_csv(filename)
 
     # Feature Engineering: Calculate percentage change for the target
@@ -16,7 +18,7 @@ def run(filename="stock_data.csv"):
     threshold_sell = -2  # Sell if price expected to decrease < -2%
     data['Target'] = data['Pct_Change'].apply(lambda x: 'Buy' if x > threshold_buy else ('Sell' if x < threshold_sell else 'Hold'))
 
-    # Drop rows with NaN
+    # Drop rows with NaN (due to pct_change calculation)
     data.dropna(inplace=True)
 
     # Check class distribution
@@ -27,10 +29,10 @@ def run(filename="stock_data.csv"):
     X = data[features]
     y = data['Target']
 
-    # Split data
+    # Split data into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Normalize data
+    # Normalize the data (scaling the features)
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
@@ -39,10 +41,21 @@ def run(filename="stock_data.csv"):
     knn = KNeighborsClassifier(n_neighbors=5)
     knn.fit(X_train, y_train)
 
+    # Create models directory if it doesn't exist
+    if not os.path.exists('models'):
+        os.makedirs('models')
+
+    # Save the model and scaler
+    joblib.dump(knn, 'models/knn_model.pkl')
+    joblib.dump(scaler, 'models/scaler.pkl')
+
     # Evaluate the model
     y_pred = knn.predict(X_test)
-    return classification_report(y_test, y_pred, zero_division=0)
 
+    # Print classification report
+    print(classification_report(y_test, y_pred, zero_division=0))
+    
+    # # Plot confusion matrix
     # cm = confusion_matrix(y_test, y_pred)
     # plt.figure(figsize=(8, 6))
     # sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=knn.classes_, yticklabels=knn.classes_)
@@ -50,32 +63,40 @@ def run(filename="stock_data.csv"):
     # plt.xlabel('Predicted Label')
     # plt.ylabel('True Label')
     # plt.show()
+    
+    return knn, scaler, classification_report(y_test, y_pred, zero_division=0)
 
-    # # New data for prediction (expect return buy)
-    # new_data = pd.DataFrame({
-    #     'Open': [150.0],
-    #     'High': [155.0],
-    #     'Low': [149.0],
-    #     'Close': [154.0],
-    #     'Volume': [500000]
-    # })
+def load_or_train_model(filename="stock_data.csv"):
+    if os.path.exists('models/knn_model.pkl') and os.path.exists('models/scaler.pkl'):
+        # Load the model and scaler
+        knn = joblib.load('models/knn_model.pkl')
+        scaler = joblib.load('models/scaler.pkl')
+        print("Model and scaler loaded from file.")
+    else:
+        # Train the model and save it
+        knn, scaler, rp = train_and_save_model(filename)
+        print("Model and scaler trained and saved.")
+    return knn, scaler
 
-    # # Normalize the new data
-    # new_data_scaled = scaler.transform(new_data)
+def predict_new_data(open, high, low, close, volume):
+    # Load or train the model and scaler
+    knn, scaler = load_or_train_model()
 
-    # # Predict the target for the new data
-    # new_prediction = knn.predict(new_data_scaled)
-    # print(f"Prediction for new data: {new_prediction[0]}")
+    # Normalize the new data
+    new_data = pd.DataFrame({
+        'Open': [float(open)],
+        'High': [float(high)],
+        'Low': [float(low)],
+        'Close': [float(close)],
+        'Volume': [float(volume)]
+    })
+    new_data_scaled = scaler.transform(new_data)
+    
+    # Make prediction
+    prediction = knn.predict(new_data_scaled)
+    return prediction[0]
 
-
-    # # New data for prediction with likely "Sell" condition
-    # new_data_sell = pd.DataFrame({
-    #     'Open': [200.0],
-    #     'High': [210.0],
-    #     'Low': [80.0],
-    #     'Close': [85.0],  # Very low to ensure Sell
-    #     'Volume': [1000000]
-    # })
-    # new_data_sell_scaled = scaler.transform(new_data_sell)
-    # new_prediction_sell = knn.predict(new_data_sell_scaled)
-    # print(f"Prediction for extreme Sell data: {new_prediction_sell[0]}")
+if __name__ == "__main__":
+    train_and_save_model(filename="stock_data.csv")
+    print(predict_new_data(12.5, 12.8, 12.3, 28.8, 15))
+    print(predict_new_data(12.5, 12.8, 12.3, 9.93, 15))

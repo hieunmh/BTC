@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify
 import pandas as pd
 import requests
 import os
-from decision_tree import run as run_decision_tree
-from bayes import run as run_bayes
-from knn import run as run_knn
+from decision_tree import train_and_save_model as train_decision_tree, predict_new_data as predict_decision_tree
+from bayes import train_and_save_model as train_bayes, predict_new_data as predict_bayes
+from knn import train_and_save_model as train_knn, predict_new_data as predict_knn
 
 app = Flask(__name__)
 
@@ -20,7 +20,7 @@ def fetch_stock_data(symbol, interval, limit):
     return df
 
 # Function to save or update stock data to CSV
-def save_stock_data(df, filename='stock_data.csv'):
+def save_stock_data(df, filename='stock_data_test.csv'):
     if os.path.exists(filename):
         existing_df = pd.read_csv(filename, index_col='timestamp', parse_dates=True)
         df = pd.concat([existing_df, df])
@@ -31,26 +31,46 @@ def save_stock_data(df, filename='stock_data.csv'):
 def fetch_and_save():
     symbol = request.args.get('symbol', 'BTCUSDT')
     interval = request.args.get('interval', '1d')
-    limit = int(request.args.get('limit', 100))
+    limit = request.args.get('limit', 1000)
     df = fetch_stock_data(symbol, interval, limit)
-    save_stock_data(df, 'stock_data_test.csv')
-    return jsonify({"message": "Stock data fetched and saved successfully."})
+    save_stock_data(df)
+    return jsonify({"message": "Stock data fetched and saved successfully in file stock_data_test.csv."})
 
 @app.route('/train_models', methods=['GET'])
 def train_models():
     algo = request.args.get('algo', 'all')
-    filename = "stock_data_test.csv"
+    filename = request.args.get('filename', 'stock_data.csv')
     
     results = {}
     
     if algo == 'decision_tree' or algo == 'all':
-        results['decision_tree_report'] = run_decision_tree(filename)
+        results['decision_tree_report'] = train_decision_tree(filename)[2]
     if algo == 'bayes' or algo == 'all':
-        results['bayes_report'] = run_bayes(filename)
+        results['bayes_report'] = train_bayes(filename)[2]
     if algo == 'knn' or algo == 'all':
-        results['knn_report'] = run_knn(filename)
+        results['knn_report'] = train_knn(filename)[2]
     
     return jsonify(results)
 
-if __name__ == '__main__':
+@app.route('/predict', methods=['GET'])
+def predict():
+    model_type = request.args.get('model', 'decision_tree')
+    open_price = float(request.args.get('open'))
+    high_price = float(request.args.get('high'))
+    low_price = float(request.args.get('low'))
+    close_price = float(request.args.get('close'))
+    volume = float(request.args.get('volume'))
+
+    if model_type == 'decision_tree':
+        prediction = predict_decision_tree(open_price, high_price, low_price, close_price, volume)
+    elif model_type == 'bayes':
+        prediction = predict_bayes(open_price, high_price, low_price, close_price, volume)
+    elif model_type == 'knn':
+        prediction = predict_knn(open_price, high_price, low_price, close_price, volume)
+    else:
+        return jsonify({"error": "Invalid model type specified."}), 400
+
+    return jsonify({"model": model_type, "prediction": prediction})
+
+if __name__ == "__main__":
     app.run(port=8000, debug=True)
