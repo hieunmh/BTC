@@ -59,7 +59,7 @@ def predict():
     high_price = float(request.args.get('high'))
     low_price = float(request.args.get('low'))
     close_price = float(request.args.get('close'))
-    volume = float(request.args.get('volume'))
+    volume = float(request.args.get('volume', 1000000.0))
 
     if model_type == 'decision_tree':
         prediction = predict_decision_tree(open_price, high_price, low_price, close_price, volume)
