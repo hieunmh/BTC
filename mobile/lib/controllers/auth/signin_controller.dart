@@ -57,7 +57,6 @@ class SigninController extends GetxController {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         final token = supabase.auth.currentSession?.accessToken;
-        print(supabase.auth.currentUser);
 
         await prefs.setString('token', token!);
         Get.offAllNamed(AppRoutes.application);

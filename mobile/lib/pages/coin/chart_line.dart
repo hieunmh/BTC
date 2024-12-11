@@ -41,19 +41,20 @@ class ChartLine extends StatelessWidget {
         ),
       
         series: <CartesianSeries<ChartData, int>>[
-          SplineAreaSeries(
+          LineSeries(
             dataSource: chartData,
             xValueMapper: (ChartData data, _) => data.index,
             yValueMapper: (ChartData data, _) => data.price,
-            splineType: SplineType.monotonic,
-            gradient: LinearGradient(
-              colors: [
-                percentChange > 0 ? const Color(0xff1bb455).withOpacity(1) : const Color(0xffd23c3f).withOpacity(1),
-                percentChange > 0 ? const Color(0xff1bb455).withOpacity(0.5) : const Color(0xffd23c3f).withOpacity(0.5),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+            color: percentChange > 0 ? const Color(0xff1bb455).withOpacity(1) : const Color(0xffd23c3f).withOpacity(1),
+            // splineType: SplineType.monotonic,
+            // gradient: LinearGradient(
+            //   colors: [
+            //     percentChange > 0 ? const Color(0xff1bb455).withOpacity(1) : const Color(0xffd23c3f).withOpacity(1),
+            //     percentChange > 0 ? const Color(0xff1bb455).withOpacity(0.5) : const Color(0xffd23c3f).withOpacity(0.5),
+            //   ],
+            //   begin: Alignment.topCenter,
+            //   end: Alignment.bottomCenter,
+            // ),
           )
         ],
 

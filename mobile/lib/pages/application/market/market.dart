@@ -36,9 +36,9 @@ class MarketPage extends StatelessWidget {
                   child: TextField(
                     autofocus: false,
                     onChanged: (value) {
-                      marketcontroller.filterCoinsFaceValue();
+                      marketcontroller.applicationCOntroller.filterCoinsFaceValue();
                     },
-                    controller: marketcontroller.filterSearch,
+                    controller: marketcontroller.applicationCOntroller.filterSearch,
                     cursorColor: themecontroller.theme.value == 'light' ? Colors.black : Colors.white, 
                     style: TextStyle(
                       color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white, 
@@ -70,19 +70,23 @@ class MarketPage extends StatelessWidget {
                   controller: marketcontroller.faceValueScrollController,
                   scrollDirection: Axis.horizontal,
                   separatorBuilder: (context, index) => const SizedBox(width: 10), 
-                  itemCount: marketcontroller.faceValueList.length,
+                  itemCount: marketcontroller.applicationCOntroller.faceValueList.length,
                   itemBuilder: (context, index) {
-                    final item = marketcontroller.faceValueList[index];
+                    final item = marketcontroller.applicationCOntroller.faceValueList[index];
                     return GestureDetector(
                       onTap: () {
-                        marketcontroller.defaultFaceValue.value = item;
-                        marketcontroller.filterCoinsFaceValue();
-                        marketcontroller.scrollToCurrentFaceValue();
+                        marketcontroller.applicationCOntroller.defaultFaceValue.value = item;
+                        marketcontroller.applicationCOntroller.filterCoinsFaceValue();
+                        marketcontroller.scrollToCurrentFaceValue(
+                          marketcontroller.applicationCOntroller.defaultFaceValue.value,
+                          marketcontroller.applicationCOntroller.faceValueList,
+                          marketcontroller.applicationCOntroller.defaultFaceValue.value
+                        );
                       },
                       child: Container(
                         width: 100,
                         decoration: BoxDecoration(
-                          color: marketcontroller.defaultFaceValue.value == item ? const Color(0xfffbc700) : Colors.transparent,
+                          color: marketcontroller.applicationCOntroller.defaultFaceValue.value == item ? const Color(0xfffbc700) : Colors.transparent,
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
                             color: const Color(0xfffbc700),
@@ -93,8 +97,8 @@ class MarketPage extends StatelessWidget {
                           child: Text(
                             item,
                             style: TextStyle(
-                              color: marketcontroller.defaultFaceValue.value == item ? Colors.white : const Color(0xfffbc700),
-                              fontWeight: marketcontroller.defaultFaceValue.value == item ? FontWeight.bold : FontWeight.normal
+                              color: marketcontroller.applicationCOntroller.defaultFaceValue.value == item ? Colors.white : const Color(0xfffbc700),
+                              fontWeight: marketcontroller.applicationCOntroller.defaultFaceValue.value == item ? FontWeight.bold : FontWeight.normal
                             ),
                           ),
                         ),
@@ -106,23 +110,23 @@ class MarketPage extends StatelessWidget {
     
               const SizedBox(height: 10),
           
-              marketcontroller.isLoading.value ? 
+              marketcontroller.applicationCOntroller.isLoading.value ? 
               const Expanded(
                 child: Center(
                   child: Text('Loading...'),
                 )
                 ) : Expanded(
-                child: marketcontroller.noData.value ? 
+                child: marketcontroller.applicationCOntroller.noData.value ? 
                 const Center(
                   child: Text('No coins found'),
                 ) : ListView.separated(
-                  itemCount: marketcontroller.filterCoinList.length,
+                  itemCount: marketcontroller.applicationCOntroller.filterCoinList.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 10),
                   itemBuilder: (context, index) {
-                    final item = marketcontroller.filterCoinList[index];
+                    final item = marketcontroller.applicationCOntroller.filterCoinList[index];
                     return CoinItem(
                       item: item, 
-                      faceValue: marketcontroller.defaultFaceValue.value,
+                      faceValue: marketcontroller.applicationCOntroller.defaultFaceValue.value,
                       theme: themecontroller.theme.value,
                     );
                   }

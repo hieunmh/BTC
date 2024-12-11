@@ -12,12 +12,13 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getCoinList();
+    getCoinWatchList();
   }
 
-  Future<void> getCoinList() async {
+  Future<void> getCoinWatchList() async {
     try {
       final res = await supabase.from('Coins').select('*').eq('user_id', supabase.auth.currentUser!.id);
+      coinList.assignAll(res);
 
     } catch (e) {
       e.printError();

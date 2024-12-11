@@ -36,7 +36,6 @@ class ThemeButton extends StatelessWidget {
             activeColor: const Color(0xfffbc700),
             onChanged: (value) {
               toggleTheme();
-              print(1);
             }
           )
         ],

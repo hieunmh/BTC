@@ -36,10 +36,10 @@ class CoinStatistics extends StatelessWidget {
             ],
           ),
       
-          const SizedBox(height: 5),
+          const SizedBox(height: 10),
       
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             decoration: BoxDecoration(
               color: theme == 'light' ? const Color(0xfff7f7f7) : const Color(0xff1b2129),
               borderRadius: BorderRadius.circular(5)
@@ -70,7 +70,7 @@ class CoinStatistics extends StatelessWidget {
           const SizedBox(height: 15),
       
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             decoration: BoxDecoration(
               color: theme == 'light' ? const Color(0xfff7f7f7) : const Color(0xff1b2129),
               borderRadius: BorderRadius.circular(5)
@@ -101,7 +101,7 @@ class CoinStatistics extends StatelessWidget {
           const SizedBox(height: 15),
       
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             decoration: BoxDecoration(
               color: theme == 'light' ? const Color(0xfff7f7f7) : const Color(0xff1b2129),
               borderRadius: BorderRadius.circular(5)

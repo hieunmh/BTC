@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-class CoinChartPage extends StatelessWidget {
-  const CoinChartPage({super.key});
+class CoinPage extends StatelessWidget {
+  const CoinPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class CoinChartPage extends StatelessWidget {
                         ),  
                         title: Center(
                           child: Text(
-                            '${coinchartcontroller.shortName}/${coinchartcontroller.faceValue.value}',
+                            '${coinchartcontroller.shortName}/${coinchartcontroller.faceValue}',
                             style: TextStyle(
                               color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
                               fontSize: 16,
@@ -106,7 +106,7 @@ class CoinChartPage extends StatelessWidget {
               
                   SizedBox(
                     width: double.infinity,
-                    height: 400,
+                    height: 250,
                     child: ChartLine(
                       limit: coinchartcontroller.limit,
                       percentChange: double.parse(coinchartcontroller.percentChange.value),
@@ -117,7 +117,7 @@ class CoinChartPage extends StatelessWidget {
                     )
                   ),
               
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 30),
               
                   CoinFacevalue(
                     timeFramesList: coinchartcontroller.timeFramesList, 
@@ -125,8 +125,52 @@ class CoinChartPage extends StatelessWidget {
                     getCoinPrices: coinchartcontroller.getCoinPrices, 
                     setTimeFrame: coinchartcontroller.setTimeFrame
                   ),
+
+                  const SizedBox(height: 20),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (coinchartcontroller.action.value == 'add') {
+                          coinchartcontroller.addToWatchList();
+                        } else {
+                          coinchartcontroller.removeFromWatchList();
+                        }
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: const Color(0xfffbc700),
+                          borderRadius: BorderRadius.circular(5)
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                coinchartcontroller.action.value == 'add' ? Iconsax.heart_add_bold : Iconsax.heart_remove_bold,
+                                size: 24,
+                                color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+                              ),
+
+                              const SizedBox(width: 5),
+                              Text(
+                                coinchartcontroller.action.value == 'add' ? 'Add to WatchList' : 'Remove from WatchList',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white
+                                ),
+                              ),
+                            ],
+                          )
+                        ),
+                      ),
+                    ),
+                  ),
               
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 5),
               
                   CoinStatistics(
                     theme: themecontroller.theme.value,

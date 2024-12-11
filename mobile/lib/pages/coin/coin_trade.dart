@@ -131,7 +131,7 @@ class CoinTrade extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Value(${coinchartcontroller.faceValue.value})',
+                          'Value(${coinchartcontroller.faceValue})',
                           style: const TextStyle(
                             color: Colors.grey
                           ),
@@ -234,7 +234,7 @@ class CoinTrade extends StatelessWidget {
           
               CoinTotal(
                 theme: themeController.theme.value, 
-                faceValue: coinchartcontroller.faceValue.value,
+                faceValue: coinchartcontroller.faceValue,
               ),
           
               const SizedBox(height: 10),

@@ -30,8 +30,12 @@ class CoinchartController extends GetxController {
   RxString avgPrice = '0.0'.obs;
   ScrollController scrollController = ScrollController();
   RxString tradeType = 'Buy'.obs;
-  RxString faceValue = ''.obs;
+  String faceValue = '';
   RxDouble quantity = 0.0000.obs;
+  
+  RxString action = ''.obs;
+
+  final ApplicationController applicationcontroller = Get.find<ApplicationController>();
   
 
   late final String name;
@@ -48,9 +52,10 @@ class CoinchartController extends GetxController {
     percentChange.value = args['percentChange'];
     name = args['name'];
     shortName = args['shortName'];
-    faceValue.value = args['faceValue'];
+    faceValue = args['faceValue'];
     getCoinPrices();
     connectWebSocket();
+    checkAction();
     super.onInit();
   }
 
@@ -77,7 +82,7 @@ class CoinchartController extends GetxController {
     try {
       await supabase.from('Coins').insert({
         'id': const Uuid().v4(),
-        'coin_name': '$shortName/${faceValue.value}',
+        'coin_name': '$shortName/$faceValue',
         'user_id': appcontroller.userId.value,
         'amount': double.parse(quantityController.text),
         'average_price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
@@ -102,7 +107,46 @@ class CoinchartController extends GetxController {
   void resetTracsaction() {
 
   }
-  
+
+  Future<void> addToWatchList() async {
+    try {
+      await supabase.from('CoinWatchList').insert({
+        'id': const Uuid().v4(),
+        'coin_name': '$shortName/$faceValue',
+        'user_id': appcontroller.userId.value,
+        'full_name': name,
+        'createdAt': DateTime.now().toString(),
+      });
+
+      appcontroller.getWatchList();
+    } catch (e) {
+      e.printError();
+    } finally {
+      action.value = 'remove';
+    }
+  }
+
+  Future<void> removeFromWatchList() async {
+    try {
+      await supabase.from('CoinWatchList').delete().eq('coin_name', '$shortName/$faceValue').eq('user_id', appcontroller.userId.value);
+      appcontroller.getWatchList();
+    } catch (e) {
+      e.printError();
+    } finally {
+      action.value = 'add';
+    } 
+
+  }
+
+  void checkAction() {
+    for (var coin in applicationcontroller.coinWatchList) {
+      if (coin['coin_name'] == '$shortName/$faceValue') {
+        action.value = 'remove';
+      } else {
+        action.value = 'add';
+      }
+    }
+  }  
 
   void getCoinPrices() async {
     chartData.clear();

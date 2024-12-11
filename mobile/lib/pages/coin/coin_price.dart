@@ -21,6 +21,8 @@ class CoinPrice extends StatelessWidget {
     return Center(
       child: Column(
         children: [
+          const SizedBox(height: 10),
+
           Text(
             '\$${formatter.format(double.parse(trackballPrice))}',
             style: TextStyle(
