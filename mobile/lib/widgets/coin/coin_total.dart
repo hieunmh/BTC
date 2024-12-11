@@ -16,8 +16,8 @@ class CoinTotal extends StatelessWidget {
       child: Center(
         child: Text(
           'Total($faceValue)',
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: theme == 'light' ? Colors.black : Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),

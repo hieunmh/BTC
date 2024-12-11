@@ -1,4 +1,5 @@
 import 'package:btc/controllers/app/application_controller.dart';
+import 'package:btc/controllers/app/home_controller.dart';
 import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeController themecontroller = Get.find<ThemeController>();
     final ApplicationController applicationcontroller = Get.find<ApplicationController>();
+    final HomeController homecontroller = Get.find<HomeController>();
 
     final formatter = NumberFormat("#,##0.00", "en_US");
 
@@ -56,7 +58,7 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            applicationcontroller.userEmail.value,
+                            homecontroller.supabase.auth.currentUser!.email ?? '',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18
