@@ -152,15 +152,15 @@ class CoinPage extends StatelessWidget {
                               Icon(
                                 coinchartcontroller.action.value == 'add' ? Iconsax.heart_add_bold : Iconsax.heart_remove_bold,
                                 size: 24,
-                                color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+                                color: Colors.white,
                               ),
 
                               const SizedBox(width: 5),
                               Text(
                                 coinchartcontroller.action.value == 'add' ? 'Add to WatchList' : 'Remove from WatchList',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white
+                                  color: Colors.white
                                 ),
                               ),
                             ],

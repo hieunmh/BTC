@@ -142,6 +142,7 @@ class CoinchartController extends GetxController {
     for (var coin in applicationcontroller.coinWatchList) {
       if (coin['coin_name'] == '$shortName/$faceValue') {
         action.value = 'remove';
+        return;
       } else {
         action.value = 'add';
       }

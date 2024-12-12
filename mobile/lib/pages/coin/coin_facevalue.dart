@@ -47,7 +47,7 @@ class CoinFacevalue extends StatelessWidget {
                   item,
                   style: TextStyle(
                     color: timeFrame == item ? Colors.white : const Color(0xfffbc700),
-                    fontWeight:timeFrame == item ? FontWeight.bold : FontWeight.normal
+                    fontWeight:timeFrame == item ? FontWeight.bold : FontWeight.w500
                   ),
                 ),
               ),

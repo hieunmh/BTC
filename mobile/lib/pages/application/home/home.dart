@@ -1,5 +1,8 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:btc/controllers/app/application_controller.dart';
 import 'package:btc/controllers/app/home_controller.dart';
+import 'package:btc/pages/application/home/home_coinlwatchlist.dart';
 import 'package:btc/pages/application/home/home_info.dart';
 import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
@@ -54,46 +57,9 @@ class HomePage extends StatelessWidget {
         
               const SizedBox(height: 5),
         
-              SizedBox(
-                height: 120,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) => const SizedBox(width: 10), 
-                  itemCount: applicationcontroller.coinWatchList.length,
-                  itemBuilder: (context, index) {
-                    final item = applicationcontroller.coinWatchList[index];
-
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            item['coin_name'],
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          Text(
-                            item['full_name'],
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        ],
-                      ),
-                    );
-                  }
-                ),
+              HomeCoinWatchlist(
+                theme: themecontroller.theme.value,
+                coinWatchList: applicationcontroller.coinWatchList.value
               ),
         
               const SizedBox(height: 20),
