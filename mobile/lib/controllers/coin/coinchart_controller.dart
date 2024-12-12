@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:btc/controllers/app/application_controller.dart';
@@ -12,7 +14,7 @@ import 'package:uuid/uuid.dart';
 class CoinchartController extends GetxController {
   
   late final String symbol;
-  final quantityController = TextEditingController(text: '0.0000');
+  final quantityController = TextEditingController(text: '0.00001');
   final ApplicationController appcontroller = Get.find<ApplicationController>();
   final supabase = Supabase.instance.client;
 
@@ -31,9 +33,10 @@ class CoinchartController extends GetxController {
   ScrollController scrollController = ScrollController();
   RxString tradeType = 'Buy'.obs;
   String faceValue = '';
-  RxDouble quantity = 0.0000.obs;
-  
   RxString action = ''.obs;
+  RxBool isLoading = false.obs;
+  RxDouble sellMax = 0.00000.obs;
+  RxDouble buyMax = 0.00000.obs;
 
   final ApplicationController applicationcontroller = Get.find<ApplicationController>();
   
@@ -53,6 +56,7 @@ class CoinchartController extends GetxController {
     name = args['name'];
     shortName = args['shortName'];
     faceValue = args['faceValue'];
+    getCoinAmount();
     getCoinPrices();
     connectWebSocket();
     checkAction();
@@ -75,37 +79,99 @@ class CoinchartController extends GetxController {
       highPrice.value = json.decode(event)['h'];
       lowPrice.value = json.decode(event)['l'];
       avgPrice.value = json.decode(event)['w'];
+
+      buyMax.value = double.parse((appcontroller.userMoney.value / double.parse(json.decode(event)['c'])).toStringAsFixed(5));
     });
+
+  }
+
+  Future<void> getCoinAmount() async {
+    final coin = await supabase.from('Coins').select()
+    .eq('user_id', appcontroller.userId.value)
+    .eq('coin_name', '$shortName/$faceValue/$name').single();  
+
+    if (coin.isNotEmpty) {
+      sellMax.value = coin['amount'];
+    }
   }
 
   Future<void> buyCoin() async {
-    try {
-      await supabase.from('Coins').insert({
-        'id': const Uuid().v4(),
-        'coin_name': '$shortName/$faceValue',
-        'user_id': appcontroller.userId.value,
-        'amount': double.parse(quantityController.text),
-        'average_price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
-        'first_time_buy': DateTime.now().toString(),
-      });
+    if (double.parse(quantityController.text) >= buyMax.value) {
+      quantityController.text = buyMax.value.toStringAsFixed(5);
+    }
 
+    try {
+      isLoading.value = true;
+      final coin = await supabase.from('Coins')
+      .select()
+      .eq('coin_name', '$shortName/$faceValue/$name')
+      .eq('user_id', appcontroller.userId.value);
+
+      if (coin.isEmpty) {
+        final coin_id = const Uuid().v4();
+        await supabase.from('Coins').insert({
+          'id': coin_id,
+          'coin_name': '$shortName/$faceValue/$name',
+          'user_id': appcontroller.userId.value,
+          'amount': double.parse(quantityController.text),
+          'average_price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
+          'first_time_buy': DateTime.now().toString(),
+        });
+
+        await supabase.from('CoinTransHistory').insert({
+          'user_id': appcontroller.userId.value,
+          'coin_id': coin_id,
+          'type_order': 'Buy',
+          'amount': double.parse(quantityController.text),
+          'price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
+          'created_at': DateTime.now().toString(),
+        });
+
+      } else {
+        await supabase.from('Coins').update({
+          'amount': coin[0]['amount'] + double.parse(quantityController.text),
+          'average_price': (coin[0]['average_price'] * coin[0]['amount'] + double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)) * double.parse(quantityController.text)) / (coin[0]['amount'] + double.parse(quantityController.text)),
+        })
+        .eq('coin_name', '$shortName/$faceValue/$name')
+        .eq('user_id', appcontroller.userId.value);
+
+        await supabase.from('CoinTransHistory').insert({
+          'user_id': appcontroller.userId.value,
+          'coin_id': coin[0]['id'],
+          'type_order': 'Buy',
+          'amount': double.parse(quantityController.text),
+          'price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
+          'created_at': DateTime.now().toString(),
+        });
+      }
+    
       appcontroller.userMoney.value -= double.parse(quantityController.text) * double.parse(trackballPrice.value);
 
       await supabase.from('Users').update({
         'money': appcontroller.userMoney.value - (double.parse(quantityController.text) * double.parse(trackballPrice.value))
       }).eq('id', appcontroller.userId.value);
 
+      resetTracsaction();
+      Get.back();
+
     } catch (e) {
       e.printError();
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> sellCoin() async {
+    if (double.parse(quantityController.text) >= sellMax.value) {
+      quantityController.text = sellMax.value.toStringAsFixed(5);
+    }
+
 
   }
 
   void resetTracsaction() {
-
+    quantityController.text = '0.00001';
+    tradeType.value = 'Buy';
   }
 
   Future<void> addToWatchList() async {

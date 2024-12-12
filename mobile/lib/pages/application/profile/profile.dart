@@ -66,21 +66,21 @@ class ProfilePage extends StatelessWidget {
                     profilecontroller.handleSignOut();
                   }, 
                   child: Container(
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: const Color(0xfffbc700),
-                        borderRadius: BorderRadius.circular(5)
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500
-                          ),
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: const Color(0xfffbc700),
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500
                         ),
                       ),
-                    )
+                    ),
+                  )
                 ),
               ],
             ),

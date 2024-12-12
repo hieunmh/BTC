@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class CoinTrade extends StatelessWidget {
   const CoinTrade({super.key});
@@ -164,8 +165,8 @@ class CoinTrade extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () {
-                        coinchartcontroller.quantity.value -= 0.00001;
-                        coinchartcontroller.quantityController.text = (coinchartcontroller.quantity.value).toStringAsFixed(5);
+                        if (double.parse(double.parse(coinchartcontroller.quantityController.text).toStringAsFixed(5)) <= 0.00001) return; 
+                        coinchartcontroller.quantityController.text = (double.parse(coinchartcontroller.quantityController.text) - 0.00001).toStringAsFixed(5);
                       }, 
                       icon: const Icon(
                         FontAwesome.minus_solid,
@@ -197,7 +198,7 @@ class CoinTrade extends StatelessWidget {
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                               border: InputBorder.none,
-                              hintText: '0.00000',
+                              hintText: '0.00001',
                               hintStyle: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold
@@ -211,8 +212,16 @@ class CoinTrade extends StatelessWidget {
           
                     IconButton(
                       onPressed: () {
-                        coinchartcontroller.quantity.value += 0.00001;
-                        coinchartcontroller.quantityController.text = (coinchartcontroller.quantity.value).toStringAsFixed(5);
+                        if (double.parse(double.parse(coinchartcontroller.quantityController.text).toStringAsFixed(5)) >= coinchartcontroller.buyMax.value && coinchartcontroller.tradeType.value == 'Buy') {
+                          coinchartcontroller.quantityController.text = coinchartcontroller.buyMax.value.toStringAsFixed(5);
+                        }
+
+                        if (double.parse(double.parse(coinchartcontroller.quantityController.text).toStringAsFixed(5)) >= coinchartcontroller.sellMax.value && coinchartcontroller.tradeType.value == 'Sell') {
+                          coinchartcontroller.quantityController.text = coinchartcontroller.sellMax.value.toStringAsFixed(5);
+                        }
+
+                        if (coinchartcontroller.tradeType.value == 'Sell' && double.parse(double.parse(coinchartcontroller.quantityController.text).toStringAsFixed(5)) >= coinchartcontroller.sellMax.value) return;
+                        coinchartcontroller.quantityController.text = (double.parse(coinchartcontroller.quantityController.text) + 0.00001).toStringAsFixed(5);
                       }, 
                       icon: const Icon(
                         FontAwesome.plus_solid,
@@ -251,7 +260,9 @@ class CoinTrade extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${(coinchartcontroller.appcontroller.userMoney.value / double.parse(coinchartcontroller.trackballPrice.value)).toStringAsFixed(5)} ${coinchartcontroller.shortName}',
+                    coinchartcontroller.tradeType.value == 'Buy' ?
+                    '${coinchartcontroller.buyMax.value.toStringAsFixed(5)} ${coinchartcontroller.shortName}'
+                    : '${coinchartcontroller.sellMax.value} ${coinchartcontroller.shortName}',
                     style: TextStyle(
                       color: themeController.theme.value == 'light' ? Colors.black : Colors.white,
                       fontWeight: FontWeight.bold
@@ -266,6 +277,8 @@ class CoinTrade extends StatelessWidget {
                 onTap: () {
                   if (coinchartcontroller.tradeType.value == 'Buy') {
                     coinchartcontroller.buyCoin();
+                  } else {
+                    coinchartcontroller.sellCoin();
                   }
                 },
                 child: Container(
@@ -276,13 +289,16 @@ class CoinTrade extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5)
                   ),
                   child: Center(
-                    child: Text(
+                    child: coinchartcontroller.isLoading.value ? LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.white, 
+                      size: 24
+                    ) : Text(
                       coinchartcontroller.tradeType.value,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold
                       ),
-                    ),
+                    )
                   ),
                 ),
               )
