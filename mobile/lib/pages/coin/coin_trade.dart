@@ -262,7 +262,7 @@ class CoinTrade extends StatelessWidget {
                   Text(
                     coinchartcontroller.tradeType.value == 'Buy' ?
                     '${coinchartcontroller.buyMax.value.toStringAsFixed(5)} ${coinchartcontroller.shortName}'
-                    : '${coinchartcontroller.sellMax.value} ${coinchartcontroller.shortName}',
+                    : '${coinchartcontroller.sellMax.value.toStringAsFixed(5)} ${coinchartcontroller.shortName}',
                     style: TextStyle(
                       color: themeController.theme.value == 'light' ? Colors.black : Colors.white,
                       fontWeight: FontWeight.bold

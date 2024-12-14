@@ -4,7 +4,8 @@ import 'dart:convert';
 
 import 'package:btc/controllers/app/application_controller.dart';
 import 'package:btc/model/chart_data.dart';
-import 'package:flutter/widgets.dart';
+import 'package:btc/theme/theme_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -16,6 +17,7 @@ class CoinchartController extends GetxController {
   late final String symbol;
   final quantityController = TextEditingController(text: '0.00001');
   final ApplicationController appcontroller = Get.find<ApplicationController>();
+  final ThemeController themecontroller = Get.find<ThemeController>();
   final supabase = Supabase.instance.client;
 
   RxString timeFrame = '1m'.obs;
@@ -86,12 +88,16 @@ class CoinchartController extends GetxController {
   }
 
   Future<void> getCoinAmount() async {
-    final coin = await supabase.from('Coins').select()
-    .eq('user_id', appcontroller.userId.value)
-    .eq('coin_name', '$shortName/$faceValue/$name').single();  
+    try {
+      final coin = await supabase.from('Coins').select()
+      .eq('user_id', appcontroller.userId.value)
+      .eq('coin_name', '$shortName/$faceValue/$name').single();  
 
-    if (coin.isNotEmpty) {
-      sellMax.value = coin['amount'];
+      if (coin.isNotEmpty) {
+        sellMax.value = coin['amount'];
+      }
+    } catch (e) {
+      e.printError();
     }
   }
 
@@ -150,7 +156,7 @@ class CoinchartController extends GetxController {
       await supabase.from('Users').update({
         'money': appcontroller.userMoney.value - (double.parse(quantityController.text) * double.parse(trackballPrice.value))
       }).eq('id', appcontroller.userId.value);
-
+      appcontroller.userMoney.value -= double.parse(quantityController.text) * double.parse(trackballPrice.value);
       resetTracsaction();
       Get.back();
 
@@ -164,6 +170,71 @@ class CoinchartController extends GetxController {
   Future<void> sellCoin() async {
     if (double.parse(quantityController.text) >= sellMax.value) {
       quantityController.text = sellMax.value.toStringAsFixed(5);
+    }
+
+    if (sellMax.value == 0.00000) {
+      Get.snackbar(
+        'Error',
+        'You do not have any $name to sell',
+        overlayBlur: 0,
+        snackPosition: SnackPosition.TOP,
+        snackStyle: SnackStyle.FLOATING,
+        backgroundColor: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
+        titleText: Text(
+          'Error', 
+          style: TextStyle(
+            color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white, 
+            fontWeight: FontWeight.bold,
+            fontSize: 16
+          )
+        ),
+        messageText: Text(
+          'You do not have any $name to sell',
+          style: TextStyle(
+            color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white, 
+            fontSize: 14,
+            fontWeight: FontWeight.w500
+          )
+        ),
+      );
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+      final coin = await supabase.from('Coins').select()
+      .eq('coin_name', '$shortName/$faceValue/$name')
+      .eq('user_id', appcontroller.userId.value).single();
+
+      if (coin['amount'] == double.parse(quantityController.text)) {
+        await supabase.from('Coins').delete().eq('coin_name', '$shortName/$faceValue/$name').eq('user_id', appcontroller.userId.value);
+      } else {
+        await supabase.from('Coins').update({
+          'amount': coin['amount'] - double.parse(quantityController.text),
+        }).eq('coin_name', '$shortName/$faceValue/$name').eq('user_id', appcontroller.userId.value);
+      }
+
+      await supabase.from('CoinTransHistory').insert({
+        'user_id': appcontroller.userId.value,
+        'coin_id': coin['id'],
+        'type_order': 'Sell',
+        'amount': double.parse(quantityController.text),
+        'price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
+        'created_at': DateTime.now().toString(),
+      });
+
+      await supabase.from('Users').update({
+        'money': appcontroller.userMoney.value + (double.parse(quantityController.text) * double.parse(trackballPrice.value))
+      }).eq('id', appcontroller.userId.value);
+
+
+      appcontroller.userMoney.value += double.parse(quantityController.text) * double.parse(trackballPrice.value);
+      resetTracsaction();
+      Get.back();
+    } catch (e) {
+      e.printError();
+    } finally {
+      isLoading.value = false;
     }
 
 

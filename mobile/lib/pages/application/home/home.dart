@@ -40,18 +40,18 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Your coin list',
+                    'Your coin watch list',
                     style: TextStyle(
                       fontSize: 14
                     ),
                   ),
-                  Text(
-                    'See all',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12
-                    ),
-                  )
+                  // Text(
+                  //   'See all',
+                  //   style: TextStyle(
+                  //     color: Colors.grey,
+                  //     fontSize: 12
+                  //   ),
+                  // )
                 ],
               ),
         

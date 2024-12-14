@@ -43,6 +43,11 @@ class ApplicationController extends GetxController {
       activeIcon: Icon(Iconsax.bag_2_bold),
     ),
     BottomNavigationBarItem(
+      label: 'Crypto',
+      icon: Icon(Iconsax.coin_outline),
+      activeIcon: Icon(Iconsax.coin_1_bold),
+    ),
+    BottomNavigationBarItem(
       label: 'Profile',
       icon: Icon(Iconsax.user_octagon_outline),
       activeIcon: Icon(Iconsax.user_octagon_bold)
