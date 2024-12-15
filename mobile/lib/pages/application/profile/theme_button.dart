@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ThemeButton extends StatelessWidget {
   final String theme;
@@ -17,7 +18,7 @@ class ThemeButton extends StatelessWidget {
       height: 70,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
-        color: theme == 'light' ? const Color(0xfff1f1f1) : const Color(0xff1b2129),
+        color: theme == 'light' ? Colors.white : const Color(0xff1f2630),
         borderRadius: BorderRadius.circular(10)
       ),
       child: Row(

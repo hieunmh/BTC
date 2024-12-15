@@ -5,21 +5,37 @@ class CryptoController extends GetxController {
 
   final supabase = Supabase.instance.client;
   RxList<dynamic> coinList = <dynamic>[].obs;
+  RxList<dynamic> coinTransHistory = <dynamic>[].obs;
+  RxBool noCryptoData = true.obs;
 
   @override
   void onInit() {
     super.onInit();
+    
     getCoinList();
+
+    // supabase.from('CoinTransHistory').stream(primaryKey: ['id'])
+    // .listen((event) {
+    //   getCoinTransHistory();
+    // });
   }
 
-  Future<void> getCoinList() async {
-    try {
-      final res = await supabase.from('Coins').select('*').eq('user_id', supabase.auth.currentUser!.id);
-      coinList.assignAll(res);
-
-    } catch (e) {
-      e.printError();
-    }
+  void getCoinList() {
+    supabase.from('Coins').stream(primaryKey: ['id'])
+    .listen((event) {
+      if (event.isEmpty) {
+        noCryptoData.value = true;
+      } else {
+        coinList.value = event;
+        noCryptoData.value = false;
+      }
+    });
   }
 
+  Future<void> getCoinTransHistory() async {
+    final res = await supabase.from('CoinTransHistory')
+    .select('*, Coins(*)')
+    .eq('user_id', supabase.auth.currentUser!.id);
+    print(res);
+  }
 }

@@ -14,13 +14,15 @@ class ProfilePage extends StatelessWidget {
     final ProfileController profilecontroller = Get.find<ProfileController>();
     final ThemeController themecontroller = Get.find<ThemeController>();
     
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: Center(
-        child: Obx(() =>
-          Padding(
+    return Obx(() =>
+      Scaffold(
+        backgroundColor: themecontroller.theme.value == 'light' ? const Color(0xfff6f6f6) : const Color(0xff1b2129),
+        appBar: AppBar(
+          title: const Text('Profile'),
+          backgroundColor: themecontroller.theme.value == 'light' ? const Color(0xfff6f6f6) : const Color(0xff1b2129),
+        ),
+        body: Center(
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: [
@@ -41,7 +43,7 @@ class ProfilePage extends StatelessWidget {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: themecontroller.theme.value == 'light' ? const Color(0xfff6f6f6) : const Color(0xff1b2129),
+                      color: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
                       borderRadius: BorderRadius.circular(5)
                     ),
                     child: Center(
@@ -55,8 +57,8 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                const SizedBox(height: 10),
+    
+                const SizedBox(height: 20),
             
                 TextButton(
                   style: ButtonStyle(

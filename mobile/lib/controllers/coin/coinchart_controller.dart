@@ -126,7 +126,7 @@ class CoinchartController extends GetxController {
 
         await supabase.from('CoinTransHistory').insert({
           'user_id': appcontroller.userId.value,
-          'coin_id': coin_id,
+          'coin_name': '$shortName/$faceValue/$name',
           'type_order': 'Buy',
           'amount': double.parse(quantityController.text),
           'price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
@@ -143,7 +143,7 @@ class CoinchartController extends GetxController {
 
         await supabase.from('CoinTransHistory').insert({
           'user_id': appcontroller.userId.value,
-          'coin_id': coin[0]['id'],
+          'coin_name': '$shortName/$faceValue/$name',
           'type_order': 'Buy',
           'amount': double.parse(quantityController.text),
           'price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
@@ -157,6 +157,7 @@ class CoinchartController extends GetxController {
         'money': appcontroller.userMoney.value - (double.parse(quantityController.text) * double.parse(trackballPrice.value))
       }).eq('id', appcontroller.userId.value);
       appcontroller.userMoney.value -= double.parse(quantityController.text) * double.parse(trackballPrice.value);
+      sellMax.value += double.parse(double.parse(quantityController.text).toStringAsFixed(5));
       resetTracsaction();
       Get.back();
 
@@ -216,7 +217,7 @@ class CoinchartController extends GetxController {
 
       await supabase.from('CoinTransHistory').insert({
         'user_id': appcontroller.userId.value,
-        'coin_id': coin['id'],
+        'coin_name': '$shortName/$faceValue/$name',
         'type_order': 'Sell',
         'amount': double.parse(quantityController.text),
         'price': double.parse(double.parse(trackballPrice.value).toStringAsFixed(2)),
@@ -229,6 +230,8 @@ class CoinchartController extends GetxController {
 
 
       appcontroller.userMoney.value += double.parse(quantityController.text) * double.parse(trackballPrice.value);
+      sellMax.value -= double.parse(double.parse(quantityController.text).toStringAsFixed(5));
+      print(sellMax.value);
       resetTracsaction();
       Get.back();
     } catch (e) {
