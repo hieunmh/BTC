@@ -7,35 +7,47 @@ class CryptoController extends GetxController {
   RxList<dynamic> coinList = <dynamic>[].obs;
   RxList<dynamic> coinTransHistory = <dynamic>[].obs;
   RxBool noCryptoData = true.obs;
+  RxBool noHistoryData = true.obs;
 
   @override
   void onInit() {
     super.onInit();
     
     getCoinList();
-
-    // supabase.from('CoinTransHistory').stream(primaryKey: ['id'])
-    // .listen((event) {
-    //   getCoinTransHistory();
-    // });
+    getCoinTransHistory();
   }
 
   void getCoinList() {
     supabase.from('Coins').stream(primaryKey: ['id'])
-    .listen((event) {
-      if (event.isEmpty) {
+    .listen((event) async {
+      final res = await supabase.from('Coins')
+      .select()
+      .eq('user_id', supabase.auth.currentUser!.id)
+      .order('first_time_buy', ascending: false);
+
+      if (res.isEmpty) {
         noCryptoData.value = true;
       } else {
-        coinList.value = event;
+        coinList.assignAll(res);
         noCryptoData.value = false;
       }
     });
   }
 
-  Future<void> getCoinTransHistory() async {
-    final res = await supabase.from('CoinTransHistory')
-    .select('*, Coins(*)')
-    .eq('user_id', supabase.auth.currentUser!.id);
-    print(res);
+  void getCoinTransHistory() {
+    supabase.from('CoinTransHistory').stream(primaryKey: ['id'])
+    .listen((event) async {
+      final res = await supabase.from('CoinTransHistory')
+      .select('*')
+      .eq('user_id', supabase.auth.currentUser!.id)
+      .order('created_at', ascending: false);
+
+      if (res.isEmpty) {
+        noHistoryData.value = true;
+      } else {
+        coinTransHistory.assignAll(res);
+        noHistoryData.value = false;
+      }
+    });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:btc/controllers/app/crypto_controller.dart';
 import 'package:btc/pages/application/crypto/crypto_current.dart';
 import 'package:btc/pages/application/crypto/history.dart';
 import 'package:btc/theme/theme_controller.dart';
@@ -10,6 +11,7 @@ class CryptoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themecontroller = Get.find<ThemeController>();
+    final CryptoController cryptocontroller = Get.find<CryptoController>();
 
     return DefaultTabController(
       length: 2,
@@ -32,10 +34,17 @@ class CryptoPage extends StatelessWidget {
               indicatorColor: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
             ),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              CryptoCurrent(),
-              History(),
+              CryptoCurrent(
+                coinList: cryptocontroller.coinList,
+                theme: themecontroller.theme.value,
+                noCryptoData: cryptocontroller.noCryptoData.value,
+              ),
+              History(
+                coinTransHistory: cryptocontroller.coinTransHistory,
+                theme: themecontroller.theme.value,
+              ),
             ]
           )
         ),
