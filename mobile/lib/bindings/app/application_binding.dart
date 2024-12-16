@@ -1,3 +1,4 @@
+import 'package:btc/controllers/app/ai_predict_controller.dart';
 import 'package:btc/controllers/app/application_controller.dart';
 import 'package:btc/controllers/app/crypto_controller.dart';
 import 'package:btc/controllers/app/home_controller.dart';
@@ -13,5 +14,6 @@ class ApplicationBinding extends Bindings {
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<ProfileController>(() => ProfileController());
     Get.lazyPut<CryptoController>(() => CryptoController());
+    Get.lazyPut<AiPredictController>(() => AiPredictController());
   }
 }

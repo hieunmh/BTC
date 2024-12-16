@@ -100,26 +100,27 @@ class HomeInfo extends StatelessWidget {
               ),
 
               Container(
-                width: 80,
+                width: 100,
                 height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10)
                 ),
-                child: const Center(
+                child: Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(
+                        userMoney <= 500000 ? FontAwesome.arrow_trend_down_solid :
                         FontAwesome.arrow_trend_up_solid,
-                        color: Color(0xfffbc700),
+                        color: const Color(0xfffbc700),
                         size: 20,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
-                        '0.5%',
-                        style: TextStyle(
+                        '${((1- userMoney / 500000) * 100).toStringAsFixed(2)}%',
+                        style: const TextStyle(
                           color: Color(0xfffbc700),
                           fontSize: 14,
                           fontWeight: FontWeight.bold

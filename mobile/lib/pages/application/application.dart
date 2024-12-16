@@ -1,4 +1,5 @@
 import 'package:btc/controllers/app/application_controller.dart';
+import 'package:btc/pages/application/aipredict/ai_predict.dart';
 import 'package:btc/pages/application/crypto/crypto.dart';
 import 'package:btc/pages/application/home/home.dart';
 import 'package:btc/pages/application/market/market.dart';
@@ -25,6 +26,7 @@ class ApplicationPage extends StatelessWidget {
           children: const [
             HomePage(),
             MarketPage(),
+            AiPredictPage(),
             CryptoPage(),
             ProfilePage()
           ],

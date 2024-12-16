@@ -231,7 +231,6 @@ class CoinchartController extends GetxController {
 
       appcontroller.userMoney.value += double.parse(quantityController.text) * double.parse(trackballPrice.value);
       sellMax.value -= double.parse(double.parse(quantityController.text).toStringAsFixed(5));
-      print(sellMax.value);
       resetTracsaction();
       Get.back();
     } catch (e) {
