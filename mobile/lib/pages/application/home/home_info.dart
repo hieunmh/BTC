@@ -65,7 +65,7 @@ class HomeInfo extends StatelessWidget {
           ],
         ),
   
-        const SizedBox(height: 20),
+        const SizedBox(height: 15),
   
         Container(
           width: double.infinity,

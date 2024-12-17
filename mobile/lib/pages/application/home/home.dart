@@ -4,6 +4,7 @@ import 'package:btc/controllers/app/application_controller.dart';
 import 'package:btc/controllers/app/home_controller.dart';
 import 'package:btc/pages/application/home/home_coinlwatchlist.dart';
 import 'package:btc/pages/application/home/home_info.dart';
+import 'package:btc/pages/application/home/home_new_card.dart';
 import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +35,7 @@ class HomePage extends StatelessWidget {
                 userMoney: applicationcontroller.userMoney.value,
               ),
         
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
         
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,13 +46,6 @@ class HomePage extends StatelessWidget {
                       fontSize: 14
                     ),
                   ),
-                  // Text(
-                  //   'See all',
-                  //   style: TextStyle(
-                  //     color: Colors.grey,
-                  //     fontSize: 12
-                  //   ),
-                  // )
                 ],
               ),
         
@@ -62,13 +56,13 @@ class HomePage extends StatelessWidget {
                 coinWatchList: applicationcontroller.coinWatchList.value
               ),
         
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
         
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Recommended for you',
+                    'News',
                     style: TextStyle(
                       fontSize: 14
                     ),
@@ -80,17 +74,17 @@ class HomePage extends StatelessWidget {
         
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: ListView.separated(
-                    itemCount: 10,
+                    itemCount: homecontroller.newsList.length,
                     separatorBuilder: (context, index) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
-                      return Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
-                          borderRadius: BorderRadius.circular(10)
-                        ),
+                      final news = homecontroller.newsList[index];
+                      return HomeNewCard(
+                        title: news['title'],
+                        url: news['url'],
+                        urlToImage: news['urlToImage'],
+                        launchBrowser: homecontroller.lauchBrowser
                       );
                     }
                   ),
