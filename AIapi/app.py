@@ -39,7 +39,7 @@ def fetch_and_save():
 @app.route('/train_models', methods=['GET'])
 def train_models():
     algo = request.args.get('algo', 'all')
-    filename = request.args.get('filename', 'stock_data.csv')
+    filename = request.args.get('filename', 'stock_data_test.csv')
     
     results = {}
     
