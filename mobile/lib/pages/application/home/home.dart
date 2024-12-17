@@ -51,7 +51,25 @@ class HomePage extends StatelessWidget {
               ),
         
               const SizedBox(height: 5),
-        
+
+              applicationcontroller.coinWatchList.isEmpty ? Container(
+                decoration: BoxDecoration(
+                  color: themecontroller.theme.value == 'light' ? const Color(0xfff6f6f6) : const Color(0xff1f2630),
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                height: 80,
+                child: Center(
+                  child: Text(
+                    'No coins in your watch list',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                )
+              ) :
+
               homecontroller.isLoadingCoinList.value ? SizedBox(
                 height: 80,
                 child: Center(

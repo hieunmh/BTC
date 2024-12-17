@@ -100,7 +100,7 @@ class HomeInfo extends StatelessWidget {
               ),
 
               Container(
-                width: 100,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: 40,
                 decoration: BoxDecoration(
                   color: Colors.white,

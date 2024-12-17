@@ -44,6 +44,7 @@ class CryptoPage extends StatelessWidget {
               History(
                 coinTransHistory: cryptocontroller.coinTransHistory,
                 theme: themecontroller.theme.value,
+                noHistoryData: cryptocontroller.noHistoryData.value,
               ),
             ]
           )

@@ -63,7 +63,7 @@ class SignupController extends GetxController {
         await supabase.from('Users').insert({
           'id': userid,
           'email': useremail,
-          'money': 5000000,
+          'money': 500000,
           'createdAt': DateTime.now().toString(),
           'updatedAt': DateTime.now().toString()
         });

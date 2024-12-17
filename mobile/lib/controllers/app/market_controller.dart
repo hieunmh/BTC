@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:btc/controllers/app/application_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MarketController extends GetxController {
   late final Timer? timer;
-  late final WebSocketChannel channel;
+
   final faceValueScrollController = ScrollController();
   final applicationCOntroller = Get.find<ApplicationController>();
 
@@ -18,7 +17,6 @@ class MarketController extends GetxController {
 
   @override
   void onClose() {  
-    channel.sink.close();
     super.onClose();
   }
 

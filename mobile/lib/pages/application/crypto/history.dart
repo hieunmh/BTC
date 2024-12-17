@@ -6,10 +6,13 @@ import 'package:intl/intl.dart';
 class History extends StatelessWidget {
   final List<dynamic> coinTransHistory;
   final String theme;
+  final bool noHistoryData;
+
   const History({
     super.key,
     required this.coinTransHistory,
-    required this.theme
+    required this.theme,
+    required this.noHistoryData
   });
 
   @override
@@ -17,7 +20,7 @@ class History extends StatelessWidget {
 
     final ThemeController themeController = Get.find<ThemeController>();
 
-    return Container(
+    return noHistoryData ? const Center(child: Text('No history data')) : Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: ListView.separated(
         itemCount: coinTransHistory.length,
