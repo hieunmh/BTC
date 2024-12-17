@@ -32,15 +32,15 @@ class HomeNewCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Image.network(
                 urlToImage.toString(),
-                width: 70,
-                height: 70,
+                width: 75,
+                height: 75,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     'assets/error.png',
                     fit: BoxFit.cover,
-                    width: 70,
-                    height: 70,
+                    width: 75,
+                    height: 75,
                   );
                 },
               ),
@@ -49,8 +49,8 @@ class HomeNewCard extends StatelessWidget {
               child: Image.asset(
                 'assets/error.png',
                 fit: BoxFit.cover,
-                width: 70,
-                height: 70,
+                width: 75,
+                height: 75,
               ),
             ),
       

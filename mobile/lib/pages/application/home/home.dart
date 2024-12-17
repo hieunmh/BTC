@@ -8,6 +8,7 @@ import 'package:btc/pages/application/home/home_new_card.dart';
 import 'package:btc/theme/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -51,7 +52,15 @@ class HomePage extends StatelessWidget {
         
               const SizedBox(height: 5),
         
-              HomeCoinWatchlist(
+              homecontroller.isLoadingCoinList.value ? SizedBox(
+                height: 80,
+                child: Center(
+                  child: LoadingAnimationWidget.staggeredDotsWave(
+                    color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white, 
+                    size: 24
+                  ),
+                )
+              ) : HomeCoinWatchlist(
                 theme: themecontroller.theme.value,
                 coinWatchList: applicationcontroller.coinWatchList.value
               ),
@@ -72,7 +81,14 @@ class HomePage extends StatelessWidget {
         
               const SizedBox(height: 5),
         
-              Expanded(
+              homecontroller.isLoadingNews.value ? Expanded(
+                child: Center(
+                  child: LoadingAnimationWidget.staggeredDotsWave(
+                    color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white, 
+                    size: 24
+                  ),
+                )
+              ) : Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: ListView.separated(

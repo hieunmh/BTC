@@ -23,39 +23,44 @@ class ProfilePage extends StatelessWidget {
         ),
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ThemeButton(
-                  toggleTheme: themecontroller.toggleTheme,
-                  theme: themecontroller.theme.value
-                ),
-            
-                const SizedBox(height: 20),
-            
-                TextButton(
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
-                  ),
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.chat);
-                  },
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
-                      borderRadius: BorderRadius.circular(5)
+                Column(
+                  children: [
+                    ThemeButton(
+                      toggleTheme: themecontroller.toggleTheme,
+                      theme: themecontroller.theme.value
                     ),
-                    child: Center(
-                      child: Text(
-                        'Chat',
-                        style: TextStyle(
-                          color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
-                          fontWeight: FontWeight.bold,
+                
+                    const SizedBox(height: 15),
+                
+                    TextButton(
+                      style: ButtonStyle(
+                        padding: WidgetStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+                      ),
+                      onPressed: () {
+                        Get.toNamed(AppRoutes.chat);
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: themecontroller.theme.value == 'light' ? Colors.white : const Color(0xff1f2630),
+                          borderRadius: BorderRadius.circular(5)
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Chat',
+                            style: TextStyle(
+                              color: themecontroller.theme.value == 'light' ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
     
                 const SizedBox(height: 20),

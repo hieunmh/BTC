@@ -69,7 +69,7 @@ class HomeInfo extends StatelessWidget {
   
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           decoration: BoxDecoration(
             color: const Color(0xfffbc700),
             borderRadius: BorderRadius.circular(10)
