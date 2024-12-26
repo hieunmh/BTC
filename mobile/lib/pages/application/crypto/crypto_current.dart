@@ -84,7 +84,7 @@ class CryptoCurrent extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        item['amount'].toString(),
+                        item['amount'].toStringAsFixed(5),
                         style: TextStyle(
                           color: theme == 'light' ? Colors.black : Colors.white,
                           fontSize: 14,
@@ -108,7 +108,7 @@ class CryptoCurrent extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '\$${item['average_price']}',
+                        '\$${item['average_price'].toStringAsFixed(2)}',
                         style: TextStyle(
                           color: theme == 'light' ? Colors.black : Colors.white,
                           fontSize: 14,
